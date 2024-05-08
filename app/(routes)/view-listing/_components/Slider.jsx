@@ -21,7 +21,7 @@ function Slider({ imageList }) {
                                     src={item.url} width={800}
                                     height={300}
                                     alt='image'
-                                    className='rounded-xl object-cover h-[360px] w-full'
+                                    className='rounded-xl object-cover h-[500px] w-full'
                                 />
                             </CarouselItem>
                         ))}

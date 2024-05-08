@@ -50,7 +50,7 @@ function ListingMapView({ featured }) {
         .from('listing')
         .select('*, listing_images(url, listing_id)')
         .eq('active', true)
-        .in('featured', featured)
+        //.in('featured', featured)
         .like('address', '%' + searchTerm + '%')
         .order('id', { ascending: false });
     } else {
@@ -58,7 +58,7 @@ function ListingMapView({ featured }) {
         .from('listing')
         .select('*, listing_images(url, listing_id)')
         .eq('active', true)
-        .in('featured', featured)
+        //.in('featured', featured)
         .order('id', { ascending: false });
     }
 
