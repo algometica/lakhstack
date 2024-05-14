@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Router } from 'lucide-react'
+import { MailOpen, Router } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,7 +20,7 @@ function BusinessDetail({ listingDetail }) {
                     <h2 className='text-gray-500'>{listingDetail?.created_by}</h2>
                 </div>
             </div>
-            <Button onClick={() => window.location = 'mailto:' + listingDetail?.created_by}>Email</Button>
+            <Button onClick={() => window.location = 'mailto:' + listingDetail?.created_by}><MailOpen/></Button>
         </div>
     )
 }
