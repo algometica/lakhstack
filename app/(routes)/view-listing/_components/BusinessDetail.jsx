@@ -4,11 +4,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-function AgentDetail({ listingDetail }) {
+function BusinessDetail({ listingDetail }) {
 
     return (
-        <div className='flex gap-5 items-center justify-between 
-    p-5 rounded-lg shadow-md border my-6'>
+        <div className='flex gap-5 items-center justify-between p-5 rounded-lg shadow-md border my-2'>
             <div className='flex items-center gap-6'>
                 <Image src={listingDetail?.profile_image}
                     alt='profileImage'
@@ -21,9 +20,9 @@ function AgentDetail({ listingDetail }) {
                     <h2 className='text-gray-500'>{listingDetail?.created_by}</h2>
                 </div>
             </div>
-            <Button onClick={() => window.location = 'mailto:' + listingDetail?.created_by}>Send Email</Button>
+            <Button onClick={() => window.location = 'mailto:' + listingDetail?.created_by}>Email</Button>
         </div>
     )
 }
 
-export default AgentDetail
+export default BusinessDetail
