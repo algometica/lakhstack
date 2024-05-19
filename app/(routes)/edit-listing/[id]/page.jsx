@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useEffect, useState } from 'react'
 import { Label } from "@/components/ui/label"
@@ -172,7 +172,7 @@ function EditListing({ params }) {
                             <div className='p-5 border rounded-lg shadow-md grid gap-7 mt-6'>
                                 <div className='grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10'>
                                     <div className='flex gap-2 flex-col'>
-                                    <h2 className='text-gray-500'>Industry Type</h2>
+                                        <h2 className='text-gray-500'>Industry Type</h2>
                                         <Select
                                             onValueChange={(e) => values.industry = e}
                                             name="industry"
@@ -188,11 +188,12 @@ function EditListing({ params }) {
                                                 <SelectItem value="technology">Technology</SelectItem>
                                                 <SelectItem value="trades">Trades</SelectItem>
                                                 <SelectItem value="clothing-retail">Clothing</SelectItem>
+                                                <SelectItem value="immigration">Immigration</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div className='flex gap-2 flex-col'>
-                                    <h2 className='text-gray-500'>Category</h2>
+                                        <h2 className='text-gray-500'>Category</h2>
                                         <Select
                                             onValueChange={(e) => values.category = e}
                                             name="category"
@@ -221,7 +222,7 @@ function EditListing({ params }) {
                                         <h2 className='text-gray-500'>In Business Since?</h2>
                                         <Input type="number" placeholder="Ex. 2018"
                                             onChange={handleChange}
-                                            defaultValue={listing?.since} name="since" 
+                                            defaultValue={listing?.since} name="since"
                                         />
                                     </div>
 
@@ -294,6 +295,7 @@ function EditListing({ params }) {
                                     />
                                 </div>
                                 <div className='flex gap-7 justify-end'>
+                                    <h2 className='text-gray-500'>Make sure to <strong className='text-green-500'>Save</strong> your listing before <strong className='text-red-500'>Publish</strong>-ing</h2>
 
                                     <Button variant="outline" className="text-primary border-primary">
                                         {loading ? <Loader className='animate-spin' /> : 'Save'}

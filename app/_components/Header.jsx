@@ -31,21 +31,21 @@ function Header() {
     <div className='p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
       <div className='flex gap-12 items-center'>
         <Link href={'/'}>
-          <Image src={'/logo.svg'} width={150} height={150} alt='logo' />
+          <Image src={'/logo.svg'} width={100} height={100} alt='logo' />
         </Link>
         <ul className='hidden sm:flex gap-10'>
           <Link href={'/'}>
             <li className={`'hover:text-primary font-medium text-sm cursor-pointer'
-                  ${path == '/' && 'text-primary'}`}>Featured</li>
+              ${path == '/' && 'text-primary'}`}>Featured</li>
           </Link>
           <Link href={'/all-listings'}>
             <li className={`'hover:text-primary font-medium text-sm cursor-pointer'
-                  ${path == '/all-listings' && 'text-primary'}`}>All</li>
+              ${path == '/all-listings' && 'text-primary'}`}>All</li>
           </Link>
           {/* <li className='hover:text-primary font-medium text-sm cursor-pointer'>Agent Finder</li> */}
         </ul>
       </div>
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-2 items-center' id="navbar-default">
         <Link href={'/add-new-listing'}>
           <Button className='flex gap-2'><Plus className='h-5 w-3' />List</Button>
         </Link>
@@ -69,7 +69,7 @@ function Header() {
               <DropdownMenuItem>
                 <Link href={'/user#/my-listing'}>My Listing</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem> 
+              <DropdownMenuItem>
                 <SignOutButton>Logout</SignOutButton>
               </DropdownMenuItem>
             </DropdownMenuContent>

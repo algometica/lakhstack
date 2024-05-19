@@ -25,6 +25,7 @@ function FilterSection({ setIndustryType, setCategoryType }) {
                     <SelectItem value="technology">Technology</SelectItem>
                     <SelectItem value="trades">Trades</SelectItem>
                     <SelectItem value="clothing-retail">Clothing</SelectItem>
+                    <SelectItem value="immigration">Immigration</SelectItem>
                 </SelectContent>
             </Select>
 
