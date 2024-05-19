@@ -29,11 +29,12 @@ function Header() {
 
   return (
     <div className='p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
-      <div className='flex gap-8 items-center'>
+      <div className='flex gap-6 items-center'>
         <Link href={'/'}>
           <Image src={'/logo.svg'} width={100} height={100} alt='logo' />
         </Link>
-        <ul className='sm:flex gap-10'>
+        {/* <ul className='hidden sm:flex gap-10'>*/}
+        <ul className='sm:flex gap-5'>
           <Link href={'/'}>
             <li className={`'hover:text-primary font-medium text-sm cursor-pointer'
               ${path == '/' && 'text-primary'}`}>Featured</li>
