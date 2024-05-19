@@ -10,7 +10,7 @@ function Hero() {
                     </h1>
 
                     <p className="mt-4 sm:text-xl/relaxed">
-                        Your <strong>unbiased & unashamed</strong> local business-listing website
+                        Your <strong>unbiased</strong> local business-listing website
                     </p>
 
                     {/* <div className="mt-8 flex flex-wrap justify-center gap-4">

@@ -33,7 +33,7 @@ function Header() {
         <Link href={'/'}>
           <Image src={'/logo.svg'} width={100} height={100} alt='logo' />
         </Link>
-        <ul className='hidden sm:flex gap-10'>
+        <ul className='sm:flex gap-10'>
           <Link href={'/'}>
             <li className={`'hover:text-primary font-medium text-sm cursor-pointer'
               ${path == '/' && 'text-primary'}`}>Featured</li>
