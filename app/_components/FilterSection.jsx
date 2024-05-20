@@ -34,9 +34,7 @@ function FilterSection({ setIndustryType, setCategoryType }) {
                     <SelectValue placeholder="Category Type" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="All">
-                        All
-                    </SelectItem>
+                    <SelectItem value="All">All</SelectItem>
                     <SelectItem value="hair-makeup">Hair and Makeup</SelectItem>
                     <SelectItem value="catering">Catering</SelectItem>
                     <SelectItem value="restaurant">Restaurant</SelectItem>
@@ -49,6 +47,7 @@ function FilterSection({ setIndustryType, setCategoryType }) {
                     <SelectItem value="personal-training">Personal Training</SelectItem>
                     <SelectItem value="web-development">Web App Development</SelectItem>
                     <SelectItem value="electrical">Electrical</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
             </Select>
         </div>
