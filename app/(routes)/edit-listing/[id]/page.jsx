@@ -84,7 +84,6 @@ function EditListing({ params }) {
             console.log(data);
             toast('Listing Updated');
             setLoading(false)
-            publishBtnHandler();
         }
 
         for (const image of images) {
