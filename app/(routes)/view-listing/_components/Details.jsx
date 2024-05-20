@@ -46,7 +46,7 @@ function Details({ listingDetail }) {
 
             </div>
             <div className='mt-4'>
-                <h2 className='font-bold text-2xl pt-4'>What's Special</h2>
+                <h2 className='font-bold text-2xl pt-4'>About this business</h2>
                 <p className='text-gray-600 '>{listingDetail?.description}</p>
             </div>
             <div>

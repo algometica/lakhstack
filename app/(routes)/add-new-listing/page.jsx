@@ -49,7 +49,8 @@ function AddNewListing() {
             <div className='p-10 flex flex-col gap-5 items-center justify-center'>
                 <h2 className='font-bold text-2xl'>Add New Listing</h2>
                 <div className='p-10 rounded-lg border w-full shadow-md flex flex-col gap-5'>
-                    <h2 className='text-gray-500'>Enter Address which you want to list</h2>
+                    <h2 className='text-gray-500'>To make your listing unique - Enter listing's <strong>exact address (not just the city name)</strong></h2>
+                    <h3 className='text-gray-500'>In case you don't have a business address, enter your residential street address</h3>
                     <GoogleAddressSearch
                         selectedAddress={(value) => setSelectedAddress(value)}
                         setCoordinates={(value) => setCoordinates(value)}
