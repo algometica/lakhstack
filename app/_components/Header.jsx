@@ -28,7 +28,7 @@ function Header() {
   }, [])
 
   return (
-    <div className='p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
+    <div className='p-4 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
       <div className='flex gap-6 items-center'>
         <Link href={'/'}>
           <Image src={'/logo.svg'} width={100} height={100} alt='logo' />
