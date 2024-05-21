@@ -13,8 +13,8 @@ function Details({ listingDetail }) {
                 <div>
                     <h2 className='font-bold text-3xl'>{listingDetail?.business_name}</h2>
                     <h2 className='text-gray-500 text-lg flex gap-2'>
-                        <MapPin />
-                        {listingDetail?.address}</h2>
+                        <MapPin />{listingDetail.city + ", " + listingDetail.country}
+                    </h2>
                 </div>
                 {/* <Button className="flex gap-2"> <Share /> Share</Button> */}
             </div>
