@@ -14,8 +14,8 @@ function GoogleMapSection({ coordinates, listing }) {
   console.log(coordinates)
 
   const [center, setCenter] = useState({
-    lat: -3.745,
-    lng: -38.523
+    lat: coordinates.lat,
+    lng: coordinates.lng
   })
   const [map, setMap] = React.useState(null)
 
