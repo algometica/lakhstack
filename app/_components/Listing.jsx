@@ -51,7 +51,7 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
                             />
                             <div className='flex mt-2 flex-col gap-2'>
                                 <h2 className='font-bold text-xl'>{item?.business_name}</h2>
-                                <h2 className='flex gap-2 text-sm text-gray-400'><MapPin className='h-4 w-4' />{item.address}</h2>
+                                <h2 className='flex gap-2 text-sm text-gray-400'><MapPin className='h-4 w-4' />{item.city + ", " + item.country}</h2>
                                 <div className='flex gap-2 mt-2 justify-between'>
                                     <h2 className='flex gap-2 text-sm bg-slate-200 w-full rounded-md p-2 text-gray-500 justify-center items-center'>
                                         <Factory className='h-4 w-4' />

@@ -209,8 +209,7 @@ function EditListing({ params }) {
                                                 <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
                                                 <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
                                                 <SelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SelectItem>
-                                                <SelectItem value="wedding-photos">Wedding Photography</SelectItem>
-                                                <SelectItem value="wedding-videos">Wedding Videography</SelectItem>
+                                                <SelectItem value="wedding-photos-videos">Wedding Photos / Videos</SelectItem>
                                                 <SelectItem value="wedding-planner">Wedding Planner</SelectItem>
                                                 <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
                                                 <SelectItem value="mehndi">Mehndi</SelectItem>

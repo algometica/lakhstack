@@ -19,12 +19,22 @@ function AddNewListing() {
     const nextHandler = async () => {
         setLoader(true)
 
+        let city = ""
+        let country = ""
+
+        if (selectedAddress.label.split(", ").length >= 3) {
+            city = selectedAddress.label.split(", ").at(-3);
+            country = selectedAddress.label.split(", ").at(-1);
+        }
+
         const { data, error } = await supabase
             .from('listing')
             .insert([
                 {
                     address: selectedAddress.label,
                     coordinates: coordinates,
+                    city: city,
+                    country: country,
                     created_by: user?.primaryEmailAddress.emailAddress
                 },
             ])
@@ -33,13 +43,13 @@ function AddNewListing() {
         if (data) {
             setLoader(false)
             console.log("New Data Added", data);
-            toast('New Address added for listing')
+            toast.success('New Address added for listing')
             router.replace('/edit-listing/'+data[0].id)
         }
         if (error) {
             setLoader(false)
             console.log('Error!!');
-            toast('Server side error')
+            toast.error("ERROR: Address already taken OR You are trying to create a second listing; a user is only allowed to create one listing per account.");
         }
 
     }
