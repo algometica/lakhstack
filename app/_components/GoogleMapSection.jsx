@@ -10,6 +10,9 @@ const containerStyle = {
 
 function GoogleMapSection({ coordinates, listing }) {
 
+  console.log("katre Kaka")
+  console.log(coordinates)
+
   const [center, setCenter] = useState({
     lat: -3.745,
     lng: -38.523
@@ -24,8 +27,8 @@ function GoogleMapSection({ coordinates, listing }) {
     // This is just an example of getting and using the map instance!!! don't just blindly copy!
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
-
     setMap(map)
+
   }, [])
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -33,22 +36,24 @@ function GoogleMapSection({ coordinates, listing }) {
   }, [])
 
   return (
-    <div><GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={12}
-      onLoad={onLoad}
-      onUnmount={onUnmount} 
-      gestureHandling="greedy"
-    >
-      { /* Child components, such as markers, info windows, etc. */}
-      {listing.map((item, index) => (
-        <MarkerItem 
-          key={index}
-          item={item}
-        />
-      ))}
-    </GoogleMap></div>
+    <div>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={10}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        gestureHandling="greedy"
+      >
+        { /* Child components, such as markers, info windows, etc. */}
+        {listing.map((item, index) => (
+          <MarkerItem
+            key={index}
+            item={item}
+          />
+        ))}
+      </GoogleMap>
+    </div>
   )
 }
 
