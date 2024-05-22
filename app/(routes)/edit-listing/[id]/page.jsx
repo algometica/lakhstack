@@ -256,7 +256,7 @@ function EditListing({ params }) {
                                     </div>
                                     <div className='flex gap-2 flex-col'   >
                                         <h2 className='text-gray-500'>In Business Since?</h2>
-                                        <Input type="number" placeholder="Ex. 2018"
+                                        <Input type="number" placeholder="e.g. 2018"
                                             onChange={handleChange}
                                             defaultValue={listing?.since} name="since"
                                         />
@@ -307,8 +307,8 @@ function EditListing({ params }) {
                                         />
                                     </div>
                                     <div className='flex gap-2 flex-col'>
-                                        <h2 className='text-gray-500'>Instagram</h2>
-                                        <Input type="text" placeholder="https://www.instagram.com/google/"
+                                        <h2 className='text-gray-500'>Instagram URL</h2>
+                                        <Input type="text" placeholder="e.g. https://www.instagram.com/YOUR-IG/"
                                             defaultValue={listing?.instagram_url}
                                             name="instagram_url"
                                             onChange={handleChange}
