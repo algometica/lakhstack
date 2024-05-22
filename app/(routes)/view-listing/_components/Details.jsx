@@ -1,7 +1,7 @@
 
 import GoogleMapSection from '@/app/_components/GoogleMapSection'
 import { Button } from '@/components/ui/button'
-import { BadgeDollarSign, Factory, Filter, LandPlot, Link, MapPin, Phone } from 'lucide-react'
+import { BadgeDollarSign, ExternalLink, Factory, Filter, Instagram, MapPin, Phone } from 'lucide-react'
 
 import React from 'react'
 import BusinessDetail from './BusinessDetail'
@@ -35,8 +35,17 @@ function Details({ listingDetail }) {
                         {listingDetail?.price_range}
                     </h2>
                     <h2 className='flex gap-2 items-center bg-purple-100 rounded-lg p-3 text-primary justify-center'>
-                        {listingDetail?.url}
+                        <a href={listingDetail?.url} target="_blank">
+                            <ExternalLink />
+                        </a>
                     </h2>
+
+                    <h2 className='flex gap-2 items-center bg-purple-100 rounded-lg p-3 text-primary justify-center'>
+                        <a href={listingDetail?.instagram_url} target="_blank">
+                            <Instagram />
+                        </a>
+                    </h2>
+
                     <h2 className='flex gap-2 items-center justify-center bg-purple-100 rounded-lg p-3 text-primary'>
                         <Phone />
                         {listingDetail?.phone}
