@@ -5,69 +5,170 @@ import { BadgeDollarSign, ExternalLink, Factory, Filter, Instagram, MapPin, Phon
 
 import React from 'react'
 import BusinessDetail from './BusinessDetail'
+import ImageCarousel from './ImageCarousel'
 
 function Details({ listingDetail }) {
     return listingDetail && (
-        <div className='my-6 flex gap-2 flex-col'>
-            <div className='flex justify-between items-center'>
-                <div>
-                    <h2 className='font-bold text-3xl'>{listingDetail?.business_name}</h2>
-                    <h2 className='text-gray-500 text-lg flex gap-2'>
-                        <MapPin />{listingDetail.city + ", " + listingDetail.country}
-                    </h2>
+        <div className='p-8 lg:p-12'>
+            {/* Header Section */}
+            <div className='mb-12'>
+                <div className='flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6'>
+                    <div className='flex-1'>
+                        <h1 className='text-4xl lg:text-5xl font-black text-foreground leading-tight mb-4'>
+                            {listingDetail?.business_name}
+                        </h1>
+                        <div className='flex items-center gap-3 text-xl text-muted-foreground mb-6'>
+                            <MapPin className="w-6 h-6 text-primary" />
+                            <span className="font-medium">{listingDetail.city}, {listingDetail.country}</span>
+                        </div>
+                        
+                        {/* Status Badge */}
+                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-cyber/10 text-cyber font-semibold">
+                            <div className="w-2 h-2 bg-cyber rounded-full mr-2 animate-pulse"></div>
+                            Verified Business
+                        </div>
+                    </div>
                 </div>
-                {/* <Button className="flex gap-2"> <Share /> Share</Button> */}
             </div>
-            <hr></hr>
-            <div className='mt-4 flex flex-col gap-3'>
-                <h2 className=' font-bold text-2xl'>Key Features</h2>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 '>
-                    <h2 className='flex gap-2 items-center bg-purple-100 rounded-lg p-3 text-primary justify-center'>
-                        <Factory />
-                        {listingDetail?.industry}
-                    </h2>
-                    <h2 className='flex gap-2 items-center justify-center bg-purple-100 rounded-lg p-3 text-primary'>
-                        <Filter />
-                        {listingDetail?.category}
-                    </h2>
-                    <h2 className='flex gap-2 items-center justify-center bg-purple-100 rounded-lg p-3 text-primary'>
-                        <BadgeDollarSign />
-                        {listingDetail?.price_range}
-                    </h2>
-                    <h2 className='flex gap-2 items-center bg-purple-100 rounded-lg p-3 text-primary justify-center'>
-                        <a href={listingDetail?.url} target="_blank">
-                            <ExternalLink />
-                        </a>
-                    </h2>
 
-                    <h2 className='flex gap-2 items-center bg-purple-100 rounded-lg p-3 text-primary justify-center'>
-                        <a href={listingDetail?.instagram_url} target="_blank">
-                            <Instagram />
-                        </a>
-                    </h2>
+            {/* Divider */}
+            <div className='w-full h-px bg-gradient-to-r from-transparent via-border to-transparent mb-12'></div>
 
-                    <h2 className='flex gap-2 items-center justify-center bg-purple-100 rounded-lg p-3 text-primary'>
-                        <Phone />
-                        {listingDetail?.phone}
-                    </h2>
+            {/* Image Gallery Section */}
+            <div className='mb-16'>
+                <h2 className='text-3xl font-bold text-foreground mb-8'>Photo Gallery</h2>
+                <ImageCarousel imageList={listingDetail?.listing_images} />
+            </div>
+
+            {/* Divider */}
+            <div className='w-full h-px bg-gradient-to-r from-transparent via-border to-transparent mb-12'></div>
+            {/* Key Features Section */}
+            <div className='mb-16'>
+                <h2 className='text-3xl font-bold text-foreground mb-8'>Business Details</h2>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                    
+                    {/* Industry */}
+                    <div className='group bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-6 border border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-lg'>
+                        <div className='flex items-center gap-4 mb-3'>
+                            <div className='p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors'>
+                                <Factory className="w-6 h-6 text-primary" />
+                            </div>
+                            <div>
+                                <p className='text-sm font-medium text-muted-foreground'>Industry</p>
+                                <p className='text-lg font-semibold text-foreground'>{listingDetail?.industry}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Category */}
+                    <div className='group bg-gradient-to-br from-neural/5 to-neural/10 rounded-2xl p-6 border border-neural/20 hover:border-neural/40 transition-all duration-300 hover:shadow-lg'>
+                        <div className='flex items-center gap-4 mb-3'>
+                            <div className='p-3 bg-neural/10 rounded-xl group-hover:bg-neural/20 transition-colors'>
+                                <Filter className="w-6 h-6 text-neural" />
+                            </div>
+                            <div>
+                                <p className='text-sm font-medium text-muted-foreground'>Category</p>
+                                <p className='text-lg font-semibold text-foreground'>{listingDetail?.category}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Price Range */}
+                    <div className='group bg-gradient-to-br from-cyber/5 to-cyber/10 rounded-2xl p-6 border border-cyber/20 hover:border-cyber/40 transition-all duration-300 hover:shadow-lg'>
+                        <div className='flex items-center gap-4 mb-3'>
+                            <div className='p-3 bg-cyber/10 rounded-xl group-hover:bg-cyber/20 transition-colors'>
+                                <BadgeDollarSign className="w-6 h-6 text-cyber" />
+                            </div>
+                            <div>
+                                <p className='text-sm font-medium text-muted-foreground'>Price Range</p>
+                                <p className='text-lg font-semibold text-foreground'>{listingDetail?.price_range}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Website */}
+                    {listingDetail?.url && (
+                        <div className='group bg-gradient-to-br from-premium/5 to-premium/10 rounded-2xl p-6 border border-premium/20 hover:border-premium/40 transition-all duration-300 hover:shadow-lg'>
+                            <div className='flex items-center gap-4 mb-3'>
+                                <div className='p-3 bg-premium/10 rounded-xl group-hover:bg-premium/20 transition-colors'>
+                                    <ExternalLink className="w-6 h-6 text-premium" />
+                                </div>
+                                <div>
+                                    <p className='text-sm font-medium text-muted-foreground'>Website</p>
+                                    <a href={listingDetail?.url} target="_blank" rel="noopener noreferrer" 
+                                       className='text-lg font-semibold text-premium hover:underline'>
+                                        Visit Website
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Instagram */}
+                    {listingDetail?.instagram_url && (
+                        <div className='group bg-gradient-to-br from-pink-500/5 to-pink-500/10 rounded-2xl p-6 border border-pink-500/20 hover:border-pink-500/40 transition-all duration-300 hover:shadow-lg'>
+                            <div className='flex items-center gap-4 mb-3'>
+                                <div className='p-3 bg-pink-500/10 rounded-xl group-hover:bg-pink-500/20 transition-colors'>
+                                    <Instagram className="w-6 h-6 text-pink-500" />
+                                </div>
+                                <div>
+                                    <p className='text-sm font-medium text-muted-foreground'>Instagram</p>
+                                    <a href={listingDetail?.instagram_url} target="_blank" rel="noopener noreferrer" 
+                                       className='text-lg font-semibold text-pink-500 hover:underline'>
+                                        Follow Us
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Phone */}
+                    {listingDetail?.phone && (
+                        <div className='group bg-gradient-to-br from-green-500/5 to-green-500/10 rounded-2xl p-6 border border-green-500/20 hover:border-green-500/40 transition-all duration-300 hover:shadow-lg'>
+                            <div className='flex items-center gap-4 mb-3'>
+                                <div className='p-3 bg-green-500/10 rounded-xl group-hover:bg-green-500/20 transition-colors'>
+                                    <Phone className="w-6 h-6 text-green-500" />
+                                </div>
+                                <div>
+                                    <p className='text-sm font-medium text-muted-foreground'>Phone</p>
+                                    <a href={`tel:${listingDetail?.phone}`} 
+                                       className='text-lg font-semibold text-green-500 hover:underline'>
+                                        {listingDetail?.phone}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                 </div>
+            </div>
+            {/* About Section */}
+            <div className='mb-16'>
+                <h2 className='text-3xl font-bold text-foreground mb-6'>About This Business</h2>
+                <div className='prose prose-lg max-w-none'>
+                    <p className='text-lg leading-relaxed text-foreground/80 bg-muted/30 rounded-2xl p-8 border border-border/50'>
+                        {listingDetail?.description}
+                    </p>
+                </div>
+            </div>
 
+            {/* Location Section */}
+            <div className='mb-16'>
+                <h2 className='text-3xl font-bold text-foreground mb-6'>Find On Map</h2>
+                <div className='rounded-2xl overflow-hidden border border-border/50 shadow-lg'>
+                    <GoogleMapSection
+                        coordinates={listingDetail.coordinates}
+                        listing={[listingDetail]}
+                    />
+                </div>
             </div>
-            <div className='mt-4'>
-                <h2 className='font-bold text-2xl pt-4'>About this business</h2>
-                <p className='text-gray-600 '>{listingDetail?.description}</p>
-            </div>
-            <div>
-                <h2 className='font-bold text-2xl pt-4'>Find On Map</h2>
-                <GoogleMapSection
-                    coordinates={listingDetail.coordinates}
-                    listing={[listingDetail]}
-                />
-            </div>
-            <div>
-                <h2 className='font-bold text-2xl pt-4'>Contact Business</h2>
-                <BusinessDetail listingDetail={listingDetail} />
+
+            {/* Contact Section */}
+            <div className='mb-8'>
+                <h2 className='text-3xl font-bold text-foreground mb-6'>Contact Business</h2>
+                <div className='bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-8 border border-border/50'>
+                    <BusinessDetail listingDetail={listingDetail} />
+                </div>
             </div>
         </div>
     )

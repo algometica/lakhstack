@@ -1,4 +1,4 @@
-# BesharamList
+# LakhStack
 
 A modern listing platform built with Next.js, featuring custom authentication and admin controls.
 
@@ -33,7 +33,7 @@ A modern listing platform built with Next.js, featuring custom authentication an
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd besharam-list
+cd lakhstack
 ```
 
 2. Install dependencies:

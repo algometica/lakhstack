@@ -31,9 +31,21 @@ function ViewListing({params}) {
     }
 
   return (
-    <div className='px-4 md:px-32 lg:px-56 py-1'>
-        <Slider imageList={listingDetail?.listing_images} />
-        <Details listingDetail={listingDetail} />
+    <div className='min-h-screen bg-background'>
+        {/* Hero Image Section */}
+        <div className='relative h-[60vh] overflow-hidden'>
+            <Slider imageList={listingDetail?.listing_images} />
+            <div className='absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent' />
+        </div>
+
+        {/* Content Section */}
+        <div className='relative -mt-32 z-10'>
+            <div className='max-w-7xl mx-auto px-6 lg:px-8'>
+                <div className='bg-card rounded-t-3xl shadow-2xl border border-border/50'>
+                    <Details listingDetail={listingDetail} />
+                </div>
+            </div>
+        </div>
     </div>
   )
 }

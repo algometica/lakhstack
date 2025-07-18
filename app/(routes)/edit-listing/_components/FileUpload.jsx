@@ -39,7 +39,7 @@ function FileUpload({ setImages, imageList }) {
                     <div key={index}>
                         <Image src={image} width={100} height={100}
                             className='rounded-lg object-cover h-[100px] w-[100px]'
-                            alt={index}
+                            alt={`Preview image ${index + 1}`}
                         />
                     </div>
                 )
@@ -53,7 +53,7 @@ function FileUpload({ setImages, imageList }) {
                         <div key={index}>
                             <Image src={image?.url} width={100} height={100}
                                 className='rounded-lg object-cover h-[100px] w-[100px]'
-                                alt={index}
+                                alt={`Listing image ${index + 1}`}
                             />
                         </div>
                     )

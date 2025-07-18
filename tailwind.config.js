@@ -24,8 +24,24 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#7f57f1",
+          DEFAULT: "#0ea5e9",
           foreground: "hsl(var(--primary-foreground))",
+        },
+        neural: {
+          DEFAULT: "#8b5cf6",
+          foreground: "#ffffff",
+        },
+        cyber: {
+          DEFAULT: "#10b981",
+          foreground: "#ffffff",
+        },
+        premium: {
+          DEFAULT: "#f59e0b",
+          foreground: "#000000",
+        },
+        space: {
+          DEFAULT: "#1e293b",
+          foreground: "#ffffff",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

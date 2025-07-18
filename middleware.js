@@ -1,61 +1,63 @@
-import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { auth } from "@/lib/auth"
+import { NextResponse } from "next/server"
 
-export function middleware(request) {
-  const { pathname } = request.nextUrl;
+export default auth((req) => {
+  const { pathname } = req.nextUrl
+  const session = req.auth
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/', '/all-listings', '/view-listing', '/sign-in', '/sign-up'];
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+  const publicRoutes = ['/', '/all-listings', '/view-listing']
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
+  
+  // Auth routes
+  const authRoutes = ['/auth/signin', '/auth/signup', '/api/auth']
+  const isAuthRoute = authRoutes.some(route => pathname.startsWith(route))
 
-  // Admin routes
-  const adminRoutes = ['/admin'];
-  const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
+  // Admin routes protection
+  const adminRoutes = ['/admin']
+  const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route))
 
-  // Protected routes (require authentication)
-  const protectedRoutes = ['/add-new-listing', '/edit-listing', '/user'];
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-
-  // Get token from cookie
-  const token = request.cookies.get('auth-token')?.value;
-
-  // If accessing protected routes without token, redirect to login
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  // Allow public and auth routes
+  if (isPublicRoute || isAuthRoute) {
+    return NextResponse.next()
   }
 
-  // If accessing admin routes, verify admin role
+  // Redirect authenticated admins from root to /admin dashboard
+  if (pathname === '/' && session) {
+    const isAdmin = session?.user?.role === 'admin' || session?.user?.isAdmin
+    if (isAdmin) {
+      return NextResponse.redirect(new URL('/admin', req.url))
+    }
+  }
+
+  // Protected routes require authentication
+  const protectedRoutes = ['/add-new-listing', '/edit-listing', '/user']
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+
+  if ((isProtectedRoute || isAdminRoute) && !session) {
+    return NextResponse.redirect(new URL('/auth/signin', req.url))
+  }
+
+  // Admin routes require admin role
   if (isAdminRoute) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/sign-in', request.url));
-    }
-
-    const decoded = verifyToken(token);
-    if (!decoded || typeof decoded === 'string' || decoded.role !== 'admin') {
-      return NextResponse.redirect(new URL('/', request.url));
+    const isAdmin = session?.user?.role === 'admin' || session?.user?.isAdmin
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL('/', req.url))
     }
   }
 
-  // If accessing login/signup while already authenticated, redirect to home
-  if ((pathname === '/sign-in' || pathname === '/sign-up') && token) {
-    const decoded = verifyToken(token);
-    if (decoded && typeof decoded !== 'string') {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-  }
-
-  return NextResponse.next();
-}
+  return NextResponse.next()
+})
 
 export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
+     * - api (API routes) except /api/auth
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api(?!/auth)|_next/static|_next/image|favicon.ico).*)',
   ],
-}; 
+}

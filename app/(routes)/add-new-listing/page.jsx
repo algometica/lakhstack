@@ -3,7 +3,7 @@
 import GoogleAddressSearch from '@/app/_components/GoogleAddressSearch'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/utils/supabase/client';
-import { useUser } from '@clerk/nextjs';
+import { useSession } from 'next-auth/react';
 import { Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -13,7 +13,8 @@ function AddNewListing() {
     const [selectedAddress, setSelectedAddress] = useState();
     const [coordinates, setCoordinates] = useState();
     const [loader, setLoader ] = useState(false);
-    const { user } = useUser();
+    const { data: session } = useSession();
+    const user = session?.user;
     const router = useRouter();
 
     const nextHandler = async () => {
@@ -27,6 +28,9 @@ function AddNewListing() {
             country = selectedAddress.label.split(", ").at(-1);
         }
 
+        // Check if user is admin
+        const isAdmin = user?.role === 'admin' || user?.isAdmin;
+
         const { data, error } = await supabase
             .from('listing')
             .insert([
@@ -35,7 +39,7 @@ function AddNewListing() {
                     coordinates: coordinates,
                     city: city,
                     country: country,
-                    created_by: user?.primaryEmailAddress.emailAddress
+                    created_by: user?.email
                 },
             ])
             .select()
@@ -48,8 +52,19 @@ function AddNewListing() {
         }
         if (error) {
             setLoader(false)
-            console.log('Error!!');
-            toast.error("ERROR: Address already taken OR You are trying to create a second listing; a user is only allowed to create one listing per account.");
+            console.log('Error!!', error);
+            
+            // Provide different error messages based on user type and error
+            if (error.code === '23505') {
+                // Unique constraint violation (address already exists)
+                toast.error("ERROR: This address already has a listing. Please use a different address.");
+            } else if (isAdmin) {
+                // Admin-specific error handling
+                toast.error("ERROR: Unable to create listing. Please check the address and try again.");
+            } else {
+                // Regular user error handling
+                toast.error("ERROR: You are only allowed to create one listing per account, or this address is already taken.");
+            }
         }
 
     }

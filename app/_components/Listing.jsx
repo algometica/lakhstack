@@ -39,14 +39,15 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
             }
             <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
                 {listing?.length > 0 ? listing?.map((item, index) => (
-                    <Link href={'/view-listing/' + item.id}>
-                        <div key={index} className='p-3 hover:border hover:border-primary cursor-pointer rounded-lg'>
+                    <Link key={item.id || index} href={'/view-listing/' + item.id}>
+                        <div className='p-3 hover:border hover:border-primary cursor-pointer rounded-lg'>
 
                             <Image src={item?.listing_images[0] ?
                                 item?.listing_images[0]?.url
                                 : '/placeholder.svg'}
                                 width={800}
                                 height={150}
+                                alt={item?.business_name || 'Business listing image'}
                                 className='rounded-lg object-cover h-[200px]'
                             />
                             <div className='flex mt-2 flex-col gap-2'>

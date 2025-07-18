@@ -17,7 +17,7 @@ import { Formik } from 'formik'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabase/client'
 import { toast } from 'sonner'
-import { useUser } from '@clerk/nextjs'
+import { useSession } from 'next-auth/react'
 //import FileUpload from '../_components/FileUpload'
 import { Loader } from 'lucide-react'
 import {
@@ -36,7 +36,8 @@ import FileUpload from '../_components/FileUpload'
 function EditListing({ params }) {
 
 
-    const { user } = useUser();
+    const { data: session } = useSession();
+    const user = session?.user;
     const router = useRouter();
     const [listing, setListing] = useState([]);
     const [images, setImages] = useState([]);
@@ -51,7 +52,7 @@ function EditListing({ params }) {
         const { data, error } = await supabase
             .from('listing')
             .select('*, listing_images(listing_id, url)')
-            .eq('created_by', user?.primaryEmailAddress.emailAddress)
+            .eq('created_by', user?.email)
             .eq('id', params.id);
 
         if (data) {

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/utils/supabase/client'
-import { useUser } from '@clerk/nextjs'
+import { useSession } from 'next-auth/react'
 import { Bath, BedDouble, Factory, Filter, MapPin, Ruler, Trash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +21,8 @@ import {
 
 function UserListing() {
 
-    const { user } = useUser();
+    const { data: session } = useSession();
+    const user = session?.user;
     const [listing, setListing] = useState();
 
     useEffect(() => {
@@ -32,7 +33,7 @@ function UserListing() {
         const { data, error } = await supabase
             .from('listing')
             .select(`*,listing_images(url,listing_id)`)
-            .eq('created_by', user?.primaryEmailAddress.emailAddress);
+            .eq('created_by', user?.email);
         
         setListing(data);
         console.log(data);
@@ -65,7 +66,7 @@ function UserListing() {
             <h2 className='font-bold text-2xl'>Manage your listing</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                 {listing && listing.map((item, index) => (
-                    <div className='p-3 hover:border hover:border-primary rounded-lg cursor-pointer'>
+                    <div key={item.id || index} className='p-3 hover:border hover:border-primary rounded-lg cursor-pointer'>
                         <h2 className='bg-primary m-1 rounded-lg text-white absolute px-2 text-sm p-1'>{item.active ? 'Published' : 'Draft'}</h2>
                         <Image src={item?.listing_images[0] ?
                             item?.listing_images[0]?.url
@@ -73,6 +74,7 @@ function UserListing() {
                         }
                             width={800}
                             height={150}
+                            alt={item?.business_name || 'Business listing'}
                             className='rounded-lg object-cover h-[170px]'
                         />
                         <div className='flex mt-2 flex-col gap-2'>

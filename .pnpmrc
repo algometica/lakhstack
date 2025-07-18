@@ -1,0 +1,14 @@
+# PNPM Configuration
+auto-install-peers=true
+dedupe-peer-dependents=true
+enable-pre-post-scripts=true
+fund=false
+hoist-pattern[]=*eslint*
+hoist-pattern[]=*prettier*
+lockfile-include-tarball-url=false
+prefer-frozen-lockfile=true
+public-hoist-pattern[]=*types*
+resolution-mode=highest
+save-exact=false
+shared-workspace-lockfile=true
+strict-peer-dependencies=false

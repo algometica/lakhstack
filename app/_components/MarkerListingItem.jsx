@@ -12,6 +12,7 @@ function MarkerListingItem({ item, closeHandler }) {
                 <Image src={item?.listing_images[0]?.url}
                     width={800}
                     height={150}
+                    alt={item?.business_name || 'Listing image'}
                     className='rounded-lg object-cover w-[165px] h-[100px]'
                 />
                 <div className='bg-white flex mt-2 flex-col gap-2 p-2'>
