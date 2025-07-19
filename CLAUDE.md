@@ -5,6 +5,7 @@
 - `pnpm build` - Production build  
 - `pnpm lint` - ESLint
 - `node scripts/setup-admin.js` - DB & admin setup
+- `node scripts/verify-deployment.js [domain]` - Check deployment env vars
 
 ## Environment
 ```

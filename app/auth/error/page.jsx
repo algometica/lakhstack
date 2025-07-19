@@ -6,7 +6,7 @@ import { AlertCircle, Home, Mail } from 'lucide-react';
 import Link from 'next/link';
 
 const errorMessages = {
-  Configuration: 'There was a problem with the server configuration.',
+  Configuration: 'There was a problem with the server configuration. This usually means missing environment variables on the server.',
   AccessDenied: 'You do not have permission to access this application.',
   Verification: 'The verification link has expired or is invalid.',
   Default: 'An error occurred during authentication.'
