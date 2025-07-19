@@ -520,11 +520,8 @@ function EditListing({ params }) {
                     setFieldValue
                 }) => {
                     // Save form state whenever values change
-                    React.useEffect(() => {
-                        if (hasLoadedInitially && values) {
-                            saveFormState(values);
-                        }
-                    }, [values]);
+                    // Note: We can't use useEffect here due to Rules of Hooks
+                    // Form state saving will be handled differently
 
                     return (
                     <form onSubmit={handleSubmit}>

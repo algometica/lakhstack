@@ -29,7 +29,7 @@ function Header() {
 
   useEffect(() => {
     console.log(path)
-  }, [])
+  }, [path])
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });

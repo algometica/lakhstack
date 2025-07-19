@@ -17,13 +17,13 @@ function ListingMapView({ featured }) {
 
   useEffect(() => {
     getLatestListing();
-  }, [])
+  }, [featured])
 
   useEffect(() => {
     if (industryType !== undefined || categoryType !== undefined) {
       handleSearchClick();
     }
-  }, [industryType, categoryType])
+  }, [industryType, categoryType, searchedAddress])
 
   const getLatestListing = async () => {
     const { data, error } = await supabase

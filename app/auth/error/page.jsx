@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, Home, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 const errorMessages = {
   Configuration: 'There was a problem with the server configuration. This usually means missing environment variables on the server.',
@@ -12,7 +13,7 @@ const errorMessages = {
   Default: 'An error occurred during authentication.'
 };
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
   
@@ -66,5 +67,13 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
