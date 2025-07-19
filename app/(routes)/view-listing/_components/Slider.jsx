@@ -19,7 +19,7 @@ function Slider({ imageList }) {
                             <CarouselItem key={index}>
                                 <div className="relative h-[60vh] w-full overflow-hidden">
                                     <Image
-                                        src={item.url} 
+                                        src={item.url || null} 
                                         fill
                                         alt={`Business image ${index + 1}`}
                                         className='object-cover'

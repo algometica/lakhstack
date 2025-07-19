@@ -12,7 +12,7 @@ function Hero() {
                     
                     {/* Main Heading - Bold and Authoritative */}
                     <h1 className="text-6xl font-black tracking-tight text-foreground sm:text-8xl md:text-9xl lg:text-[10rem] leading-none">
-                        The <span style={{ color: '#db4a2b' }}>LakhStack</span>
+                        <span style={{ color: '#db4a2b' }}>LakhStack</span>
                     </h1>
                     
                     {/* Subheading */}
@@ -22,7 +22,7 @@ function Hero() {
 
                     {/* Value Proposition */}
                     <p className="mt-8 text-lg leading-8 text-foreground/70 max-w-2xl mx-auto sm:text-xl">
-                        Discover authentic local businesses. No paid placements. No biased rankings. 
+                        Discover authentic local businesses. No biased rankings. 
                         <strong className="text-primary font-semibold"> Just real recommendations.</strong>
                     </p>
 

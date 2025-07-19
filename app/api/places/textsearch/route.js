@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { makeGooglePlacesRequest } from '@/lib/google-places';
 
 export async function POST(request) {
     try {
@@ -11,27 +12,15 @@ export async function POST(request) {
             );
         }
 
-        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY;
-        
-        if (!apiKey) {
-            console.error('Google Places API key is missing from environment variables');
-            return NextResponse.json(
-                { error: 'Google Places API key is not configured' },
-                { status: 500 }
-            );
-        }
-
         console.log('Making request to Google Places Text Search API with input:', input);
 
         // Get the origin from the request headers
         const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:3000';
 
         // Using Google Places API (New) - Text Search (New)
-        const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
+        const data = await makeGooglePlacesRequest('https://places.googleapis.com/v1/places:searchText', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': apiKey,
                 'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.location,places.id',
                 'Referer': origin,
                 'Origin': origin
@@ -42,17 +31,6 @@ export async function POST(request) {
                 languageCode: 'en'
             })
         });
-
-        if (!response.ok) {
-            const errorData = await response.text();
-            console.error('Google Places Text Search API error:', response.status, errorData);
-            return NextResponse.json(
-                { error: 'Failed to fetch place suggestions', details: errorData },
-                { status: response.status }
-            );
-        }
-
-        const data = await response.json();
         
         // Transform the response to match our expected format
         const transformedData = {

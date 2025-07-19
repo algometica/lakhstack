@@ -38,7 +38,7 @@ function ViewListing({params}) {
             {listingDetail?.listing_images && listingDetail.listing_images.length > 0 ? (
                 <div className='relative h-full w-full'>
                     <Image
-                        src={listingDetail.listing_images[0].url}
+                        src={listingDetail.listing_images[0].url || null}
                         fill
                         alt={`${listingDetail?.business_name} hero image`}
                         className='object-cover'

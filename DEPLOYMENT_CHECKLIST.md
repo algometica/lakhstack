@@ -18,9 +18,12 @@ NEXT_PUBLIC_SUPABASE_API_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-### Google Places API
+**Note:** The `NEXT_PUBLIC_SUPABASE_API_KEY` warning in Vercel is a **false positive**. Supabase's anon key is **designed to be public** and safe for client-side use. This is the intended behavior for Supabase.
+
+### Google API Keys (SECURE - Server-side only)
 ```
-NEXT_PUBLIC_GOOGLE_PLACE_API_KEY=your_google_places_api_key
+GOOGLE_PLACES_API_KEY=your_google_places_api_key
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
 
 ### Admin Configuration
@@ -79,6 +82,11 @@ After setting all environment variables:
 ### PKCE Errors
 - Usually resolved by the updated auth configuration
 - Clear browser cookies if persistent
+
+### Supabase API Key Warning
+- **This is a false positive** - Supabase's anon key is designed to be public
+- The warning appears because the variable name contains "KEY"
+- This is the intended behavior for Supabase client-side operations
 
 ## Debugging Steps
 

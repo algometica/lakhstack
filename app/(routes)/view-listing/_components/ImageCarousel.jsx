@@ -60,7 +60,7 @@ function ImageCarousel({ imageList }) {
             <div className="relative group">
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] w-full overflow-hidden rounded-2xl border border-border/50 shadow-lg">
                     <Image
-                        src={imageList[selectedImageIndex]?.url}
+                        src={imageList[selectedImageIndex]?.url || null}
                         fill
                         alt={`Business image ${selectedImageIndex + 1}`}
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -82,7 +82,7 @@ function ImageCarousel({ imageList }) {
                             <DialogTitle className="sr-only">Business Image Gallery</DialogTitle>
                             <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] group">
                                 <Image
-                                    src={imageList[selectedImageIndex]?.url}
+                                    src={imageList[selectedImageIndex]?.url || null}
                                     fill
                                     alt={`Business image ${selectedImageIndex + 1} - Full size`}
                                     className="object-contain"
@@ -179,7 +179,7 @@ function ImageCarousel({ imageList }) {
                                         onClick={() => setSelectedImageIndex(index)}
                                     >
                                         <Image
-                                            src={item.url}
+                                            src={item.url || null}
                                             fill
                                             alt={`Thumbnail ${index + 1}`}
                                             className="object-cover transition-transform duration-300 hover:scale-110"

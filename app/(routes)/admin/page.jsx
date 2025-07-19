@@ -38,8 +38,8 @@ import {
 import Link from 'next/link';
 
 const INDUSTRIES = [
-  'wedding', 'fitness', 'personal-care', 'food', 'photography', 
-  'pets', 'housekeeping', 'handicraft', 'technology', 'trades', 'immigration'
+  'farming', 'fitness', 'food', 'handicraft', 'housekeeping', 'immigration',
+  'personal-care', 'pets', 'photography', 'technology', 'trades', 'wedding'
 ];
 
 const PRICE_RANGES = ['$100 and under', '$100-$250', '$250-$500', '$500+'];

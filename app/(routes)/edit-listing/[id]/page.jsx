@@ -71,6 +71,40 @@ function EditListing({ params }) {
     const [success, setSuccess] = useState('');
     const [saveLoading, setSaveLoading] = useState(false);
     const [publishLoading, setPublishLoading] = useState(false);
+    const [hasLoadedInitially, setHasLoadedInitially] = useState(false);
+    
+    // Local storage key for form state
+    const formStateKey = `edit-listing-${resolvedParams.id}-form-state`;
+    
+    // Load form state from localStorage
+    const loadSavedFormState = () => {
+        try {
+            const saved = localStorage.getItem(formStateKey);
+            return saved ? JSON.parse(saved) : null;
+        } catch (error) {
+            console.error('Error loading form state:', error);
+            return null;
+        }
+    };
+
+    // Save form state to localStorage
+    const saveFormState = (formValues) => {
+        try {
+            localStorage.setItem(formStateKey, JSON.stringify(formValues));
+        } catch (error) {
+            console.error('Error saving form state:', error);
+        }
+    };
+
+    // Clear saved form state
+    const clearSavedFormState = () => {
+        try {
+            localStorage.removeItem(formStateKey);
+        } catch (error) {
+            console.error('Error clearing form state:', error);
+        }
+    };
+    
     // Check authentication and authorization
     useEffect(() => {
         if (status === 'loading') return; // Still loading
@@ -88,10 +122,10 @@ function EditListing({ params }) {
             return;
         }
 
-        if (user && resolvedParams.id) {
+        if (user && resolvedParams.id && !hasLoadedInitially) {
             verifyUserRecord();
         }
-    }, [session, status, user, router, resolvedParams.id]);
+    }, [session, status, user, router, resolvedParams.id, hasLoadedInitially]);
 
     const verifyUserRecord = async () => {
         try {
@@ -112,6 +146,7 @@ function EditListing({ params }) {
 
             if (data && data.length > 0) {
                 setListing(data[0]);
+                setHasLoadedInitially(true);
             } else {
                 setError('Listing not found or you do not have permission to edit it.');
                 toast.error('Listing not found');
@@ -175,6 +210,7 @@ function EditListing({ params }) {
             if (validationErrors.length > 0) {
                 setError(validationErrors.join('. '));
                 toast.error('Please fix the form errors');
+                setSaveLoading(false);
                 return;
             }
 
@@ -185,20 +221,40 @@ function EditListing({ params }) {
             if (!hasExistingImages && !hasNewImages) {
                 setError('Please add at least 1 image for your listing');
                 toast.error('At least one image is required');
+                setSaveLoading(false);
                 return;
             }
 
-            // Update the listing data
+            // Update the listing data - only include fields that exist in the database
+            const updateData = {
+                business_name: formValue.business_name || '',
+                industry: formValue.industry || null,
+                category: formValue.category || null,
+                since: formValue.since ? parseInt(formValue.since) : null,
+                price_range: formValue.price_range || null,
+                phone: formValue.phone || null,
+                url: formValue.url || null,
+                instagram_url: formValue.instagram_url || null,
+                business_email: formValue.business_email || null,
+                description: formValue.description || '',
+                featured: formValue.featured || false
+            };
+
+            
             const { data, error } = await supabase
                 .from('listing')
-                .update(formValue)
+                .update(updateData)
                 .eq('id', resolvedParams.id)
                 .select();
 
             if (error) {
-                console.error('Database error:', error);
-                setError('Failed to update listing. Please try again.');
+                console.error('Database error details:', error);
+                console.error('Error message:', error.message);
+                console.error('Error hint:', error.hint);
+                console.error('Error details:', error.details);
+                setError(`Failed to update listing: ${error.message || 'Unknown error'}`);
                 toast.error('Failed to update listing');
+                setSaveLoading(false);
                 return;
             }
 
@@ -220,6 +276,7 @@ function EditListing({ params }) {
                         console.error('Upload error:', uploadError);
                         setError('Error uploading images. Please try again.');
                         toast.error('Failed to upload images');
+                        setSaveLoading(false);
                         return;
                     }
 
@@ -237,6 +294,7 @@ function EditListing({ params }) {
                         console.error('Database image error:', dbError);
                         setError('Error saving image references. Please try again.');
                         toast.error('Failed to save image references');
+                        setSaveLoading(false);
                         return;
                     }
                 }
@@ -244,6 +302,9 @@ function EditListing({ params }) {
 
             setSuccess('Listing updated successfully! Your changes have been saved.');
             toast.success('Listing updated successfully');
+            
+            // Clear saved form state since changes are now saved
+            clearSavedFormState();
             
             // Refresh the listing data
             await verifyUserRecord();
@@ -270,6 +331,7 @@ function EditListing({ params }) {
             if (!listing?.business_name || !listing?.industry || !listing?.category || !listing?.description) {
                 setError('Please complete all required fields before publishing.');
                 toast.error('Complete all required fields first');
+                setPublishLoading(false);
                 return;
             }
 
@@ -278,6 +340,7 @@ function EditListing({ params }) {
             if (!hasImages) {
                 setError('Please add at least one image before publishing.');
                 toast.error('At least one image is required');
+                setPublishLoading(false);
                 return;
             }
 
@@ -291,12 +354,16 @@ function EditListing({ params }) {
                 console.error('Publish error:', error);
                 setError('Failed to publish listing. Please try again.');
                 toast.error('Failed to publish listing');
+                setPublishLoading(false);
                 return;
             }
 
             if (data) {
                 setSuccess('Listing published successfully! It is now live and visible to users.');
                 toast.success('Listing Published!');
+                
+                // Clear saved form state since listing is now published
+                clearSavedFormState();
                 
                 // Refresh listing data
                 await verifyUserRecord();
@@ -423,21 +490,24 @@ function EditListing({ params }) {
                         )}
 
             <Formik
-                initialValues={{
-                    business_name: listing?.business_name || '',
-                    industry: listing?.industry || '',
-                    category: listing?.category || '',
-                    since: listing?.since || '',
-                    price_range: listing?.price_range || '',
-                    phone: listing?.phone || '',
-                    url: listing?.url || '',
-                    instagram_url: listing?.instagram_url || '',
-                    business_email: listing?.business_email || '',
-                    description: listing?.description || '',
-                    featured: listing?.featured || false,
-                    profile_image: user?.imageUrl,
-                    username: user?.fullName
-                }}
+                initialValues={(() => {
+                    const savedState = loadSavedFormState();
+                    return savedState || {
+                        business_name: listing?.business_name || '',
+                        industry: listing?.industry || '',
+                        category: listing?.category || '',
+                        since: listing?.since || '',
+                        price_range: listing?.price_range || '',
+                        phone: listing?.phone || '',
+                        url: listing?.url || '',
+                        instagram_url: listing?.instagram_url || '',
+                        business_email: listing?.business_email || '',
+                        description: listing?.description || '',
+                        featured: listing?.featured || false,
+                        profile_image: user?.imageUrl,
+                        username: user?.fullName
+                    };
+                })()}
                 enableReinitialize={true}
                 onSubmit={(values) => {
                     onSubmitHandler(values);
@@ -446,8 +516,17 @@ function EditListing({ params }) {
                 {({
                     values,
                     handleChange,
-                    handleSubmit
-                }) => (
+                    handleSubmit,
+                    setFieldValue
+                }) => {
+                    // Save form state whenever values change
+                    React.useEffect(() => {
+                        if (hasLoadedInitially && values) {
+                            saveFormState(values);
+                        }
+                    }, [values]);
+
+                    return (
                     <form onSubmit={handleSubmit}>
                         <div className="p-8">
                             <div className="space-y-8">
@@ -465,26 +544,26 @@ function EditListing({ params }) {
                                                 Industry Type *
                                             </label>
                                             <Select
-                                                onValueChange={(e) => values.industry = e}
+                                                onValueChange={(value) => setFieldValue('industry', value)}
                                                 name="industry"
-                                                defaultValue={listing?.industry}
                                                 value={values.industry}
                                             >
                                                 <SelectTrigger className="h-12">
                                                     <SelectValue placeholder="Select Industry Type" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="wedding">Wedding</SelectItem>
+                                                    <SelectItem value="farming">Farming</SelectItem>
                                                     <SelectItem value="fitness">Fitness</SelectItem>
-                                                    <SelectItem value="personal-care">Personal Care Services</SelectItem>
                                                     <SelectItem value="food">Food</SelectItem>
-                                                    <SelectItem value="photography">Photography</SelectItem>
-                                                    <SelectItem value="pets">Pets</SelectItem>
-                                                    <SelectItem value="housekeeping">Housekeeping</SelectItem>
                                                     <SelectItem value="handicraft">Handicraft</SelectItem>
+                                                    <SelectItem value="housekeeping">Housekeeping</SelectItem>
+                                                    <SelectItem value="immigration">Immigration</SelectItem>
+                                                    <SelectItem value="personal-care">Personal Care Services</SelectItem>
+                                                    <SelectItem value="pets">Pets</SelectItem>
+                                                    <SelectItem value="photography">Photography</SelectItem>
                                                     <SelectItem value="technology">Technology</SelectItem>
                                                     <SelectItem value="trades">Trades</SelectItem>
-                                                    <SelectItem value="immigration">Immigration</SelectItem>
+                                                    <SelectItem value="wedding">Wedding</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -495,48 +574,47 @@ function EditListing({ params }) {
                                                 Category *
                                             </label>
                                             <Select
-                                                onValueChange={(e) => values.category = e}
+                                                onValueChange={(value) => setFieldValue('category', value)}
                                                 name="category"
-                                                defaultValue={listing?.category}
                                                 value={values.category}
                                             >
                                                 <SelectTrigger className="h-12">
                                                     <SelectValue placeholder="Select Category" />
                                                 </SelectTrigger>
                                                 <SelectContent>
+                                                    <SelectItem value="auto-repair">Auto Repair</SelectItem>
                                                     <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
-                                                    <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
+                                                    <SelectItem value="catering">Catering</SelectItem>
+                                                    <SelectItem value="custom-cakes">Custom Cakes</SelectItem>
+                                                    <SelectItem value="custom-cookies">Custom Cookies</SelectItem>
+                                                    <SelectItem value="custom-food">Custom Food / Delicacy</SelectItem>
+                                                    <SelectItem value="dog-sitter">Dog Sitter</SelectItem>
+                                                    <SelectItem value="electrician">Electrician</SelectItem>
+                                                    <SelectItem value="eyebrows">Eyebrows</SelectItem>
+                                                    <SelectItem value="facials">Facials</SelectItem>
+                                                    <SelectItem value="family-photos">Family Photography</SelectItem>
+                                                    <SelectItem value="decoration">Flowers & Decoration</SelectItem>
+                                                    <SelectItem value="hair-dresser">Hair Dresser</SelectItem>
+                                                    <SelectItem value="home-cook">Home Cook</SelectItem>
+                                                    <SelectItem value="house-cleaner">House Cleaner</SelectItem>
+                                                    <SelectItem value="lashes">Lashes</SelectItem>
+                                                    <SelectItem value="lifestyle-photos">Lifestyle Photography</SelectItem>
+                                                    <SelectItem value="mehndi">Mehndi</SelectItem>
+                                                    <SelectItem value="misc">Misc</SelectItem>
+                                                    <SelectItem value="music">Music</SelectItem>
+                                                    <SelectItem value="nails">Nails</SelectItem>
+                                                    <SelectItem value="nutrition">Nutrition</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                    <SelectItem value="personal-trainer">Personal Trainer</SelectItem>
+                                                    <SelectItem value="pet-groomer">Pet Groomer</SelectItem>
+                                                    <SelectItem value="plumber">Plumber</SelectItem>
+                                                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                                                    <SelectItem value="web-development">Web Development</SelectItem>
+                                                    <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
                                                     <SelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SelectItem>
                                                     <SelectItem value="wedding-photos-videos">Wedding Photos / Videos</SelectItem>
                                                     <SelectItem value="wedding-planner">Wedding Planner</SelectItem>
-                                                    <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
-                                                    <SelectItem value="mehndi">Mehndi</SelectItem>
-                                                    <SelectItem value="catering">Catering</SelectItem>
-                                                    <SelectItem value="decoration">Flowers & Decoration</SelectItem>
-                                                    <SelectItem value="personal-trainer">Personal Trainer</SelectItem>
-                                                    <SelectItem value="nutrition">Nutrition</SelectItem>
-                                                    <SelectItem value="facials">Facials</SelectItem>
-                                                    <SelectItem value="eyebrows">Eyebrows</SelectItem>
-                                                    <SelectItem value="lashes">Lashes</SelectItem>
-                                                    <SelectItem value="nails">Nails</SelectItem>
-                                                    <SelectItem value="hair-dresser">Hair Dresser</SelectItem>
-                                                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                                                    <SelectItem value="custom-cookies">Custom Cookies</SelectItem>
-                                                    <SelectItem value="custom-cakes">Custom Cakes</SelectItem>
-                                                    <SelectItem value="custom-food">Custom Food / Delicacy</SelectItem>
-                                                    <SelectItem value="family-photos">Family Photography</SelectItem>
-                                                    <SelectItem value="lifestyle-photos">Lifestyle Photography</SelectItem>
-                                                    <SelectItem value="misc">Misc</SelectItem>
-                                                    <SelectItem value="music">Music</SelectItem>
-                                                    <SelectItem value="dog-sitter">Dog Sitter</SelectItem>
-                                                    <SelectItem value="pet-groomer">Pet Groomer</SelectItem>
-                                                    <SelectItem value="house-cleaner">House Cleaner</SelectItem>
-                                                    <SelectItem value="home-cook">Home Cook</SelectItem>
-                                                    <SelectItem value="web-development">Web Development</SelectItem>
-                                                    <SelectItem value="electrician">Electrician</SelectItem>
-                                                    <SelectItem value="plumber">Plumber</SelectItem>
-                                                    <SelectItem value="auto-repair">Auto Repair</SelectItem>
-                                                    <SelectItem value="other">Other</SelectItem>
+                                                    <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -587,9 +665,9 @@ function EditListing({ params }) {
                                                 Hourly Price Range
                                             </label>
                                             <Select
-                                                onValueChange={(e) => values.price_range = e}
+                                                onValueChange={(value) => setFieldValue('price_range', value)}
                                                 name="price_range"
-                                                value={values.price_range || listing?.price_range || ''}
+                                                value={values.price_range}
                                             >
                                                 <SelectTrigger className="h-12">
                                                     <SelectValue placeholder="Select Price Range" />
@@ -637,7 +715,7 @@ function EditListing({ params }) {
                                             <Input 
                                                 type="email" 
                                                 placeholder="contact@yourbusiness.com"
-                                                value={values.business_email || listing?.business_email || ''}
+                                                value={values.business_email || ''}
                                                 name="business_email"
                                                 onChange={handleChange}
                                                 className="h-12"
@@ -808,7 +886,8 @@ function EditListing({ params }) {
                             </div>
                         </div>
                     </form>
-                )}
+                    );
+                }}
             </Formik>
                     </div>
                 </div>

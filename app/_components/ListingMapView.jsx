@@ -19,6 +19,12 @@ function ListingMapView({ featured }) {
     getLatestListing();
   }, [])
 
+  useEffect(() => {
+    if (industryType !== undefined || categoryType !== undefined) {
+      handleSearchClick();
+    }
+  }, [industryType, categoryType])
+
   const getLatestListing = async () => {
     const { data, error } = await supabase
       .from('listing')
