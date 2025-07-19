@@ -12,11 +12,13 @@ import { Value } from '@radix-ui/react-select'
 
 function FilterSection({ setIndustryType, setCategoryType }) {
     return (
-        <div className='px-3 py-2 grid grid-cols-2 md:flex gap-2'>
-            <Select onValueChange={(value) => value == 'All' ? setIndustryType(null) : setIndustryType(value)}>
-                <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Industry Type" />
-                </SelectTrigger>
+        <div className='p-4 md:p-6'>
+            <h3 className='text-lg font-semibold text-foreground mb-4'>Filter Results</h3>
+            <div className='flex flex-col sm:flex-row gap-4'>
+                <Select onValueChange={(value) => value == 'All' ? setIndustryType(null) : setIndustryType(value)}>
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 border-border focus:border-primary bg-background hover:bg-muted/50 transition-colors">
+                        <SelectValue placeholder="Industry Type" />
+                    </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="All">All</SelectItem>
                     <SelectItem value="wedding">Wedding</SelectItem>
@@ -33,10 +35,10 @@ function FilterSection({ setIndustryType, setCategoryType }) {
                 </SelectContent>
             </Select>
 
-            <Select onValueChange={(value) => value == 'All' ? setCategoryType(null) : setCategoryType(value)}>
-                <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Category Type" />
-                </SelectTrigger>
+                <Select onValueChange={(value) => value == 'All' ? setCategoryType(null) : setCategoryType(value)}>
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 border-border focus:border-primary bg-background hover:bg-muted/50 transition-colors">
+                        <SelectValue placeholder="Category Type" />
+                    </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="All">All</SelectItem>
                     <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
@@ -86,6 +88,7 @@ function FilterSection({ setIndustryType, setCategoryType }) {
                     <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
             </Select>
+            </div>
         </div>
     )
 }

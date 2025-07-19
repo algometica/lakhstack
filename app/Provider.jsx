@@ -19,7 +19,7 @@ function Provider({ children }) {
         <div>
           <LoadScript
             googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACE_API_KEY} 
-            libraries={['places']}
+            libraries={[]}
           >
           <Header />
           <div className='mt-40'>

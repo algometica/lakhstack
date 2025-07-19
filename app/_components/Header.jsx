@@ -38,9 +38,8 @@ function Header() {
   return (
     <div className='px-6 lg:px-10 py-4 flex justify-between items-center fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-sm'>
       <div className='flex gap-8 items-center'>
-        <Link href={'/'} className="flex items-center gap-3">
-          <Image src={'/logo.svg'} width={40} height={40} alt='logo' className="object-contain" />
-          <span className="text-xl font-black hidden sm:block" style={{ color: '#db4a2b' }}>LakhStack</span>
+        <Link href={'/'} className="flex items-center">
+          <span className="text-xl font-black" style={{ color: '#db4a2b' }}>LakhStack</span>
         </Link>
         
         <nav className='hidden md:flex gap-1'>

@@ -15,15 +15,15 @@ function MarkerListingItem({ item, closeHandler }) {
                     alt={item?.business_name || 'Listing image'}
                     className='rounded-lg object-cover w-[165px] h-[100px]'
                 />
-                <div className='bg-white flex mt-2 flex-col gap-2 p-2'>
-                    <h2 className='font-bold text-xl'>${item?.price}</h2>
-                    <h2 className='flex gap-2 text-sm text-gray-400'><MapPin className='h-4 w-4' />{item.address}</h2>
+                <div className='bg-card flex mt-2 flex-col gap-2 p-2'>
+                    <h2 className='font-bold text-xl text-foreground'>${item?.price}</h2>
+                    <h2 className='flex gap-2 text-sm text-muted-foreground'><MapPin className='h-4 w-4' />{item.address}</h2>
                     <div className='flex gap-2 mt-2 justify-between'>
-                        <h2 className='flex gap-2 text-sm bg-slate-200 w-full rounded-md p-2 text-gray-500 justify-center items-center'>
+                        <h2 className='flex gap-2 text-sm bg-muted w-full rounded-md p-2 text-muted-foreground justify-center items-center'>
                             <BedDouble className='h-4 w-4' />
                             {item?.bedroom}
                         </h2>
-                        <h2 className='flex gap-2 text-sm bg-slate-200 w-full rounded-md p-2 text-gray-500 justify-center items-center'>
+                        <h2 className='flex gap-2 text-sm bg-muted w-full rounded-md p-2 text-muted-foreground justify-center items-center'>
                             <Bath className='h-4 w-4' />
                             {item?.bathroom}
                         </h2>

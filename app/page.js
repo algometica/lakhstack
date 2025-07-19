@@ -6,13 +6,12 @@ import ListingMapView from "./_components/ListingMapView";
 export default function Home() {
   return (
     <div>
-      <div className="px-10 p-10">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
         <Hero />
       </div>
-      <div className="px-10 p-10">
+      <div>
         <ListingMapView featured={[true]} />
       </div>
     </div>
-
   );
 }

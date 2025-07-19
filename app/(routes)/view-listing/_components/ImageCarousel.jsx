@@ -14,11 +14,37 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 
 function ImageCarousel({ imageList }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    // Keyboard navigation for expanded view
+    React.useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (!isDialogOpen) return
+            
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault()
+                setSelectedImageIndex(prev => 
+                    prev === 0 ? imageList.length - 1 : prev - 1
+                )
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault()
+                setSelectedImageIndex(prev => 
+                    prev === imageList.length - 1 ? 0 : prev + 1
+                )
+            }
+        }
+
+        if (isDialogOpen) {
+            document.addEventListener('keydown', handleKeyDown)
+            return () => document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [isDialogOpen, imageList.length])
 
     if (!imageList || imageList.length === 0) {
         return (
@@ -32,7 +58,7 @@ function ImageCarousel({ imageList }) {
         <div className="space-y-6">
             {/* Main Image Display */}
             <div className="relative group">
-                <div className="relative h-96 lg:h-[500px] w-full overflow-hidden rounded-2xl border border-border/50 shadow-lg">
+                <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] w-full overflow-hidden rounded-2xl border border-border/50 shadow-lg">
                     <Image
                         src={imageList[selectedImageIndex]?.url}
                         fill
@@ -42,7 +68,7 @@ function ImageCarousel({ imageList }) {
                     />
                     
                     {/* Expand Button */}
-                    <Dialog>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
                             <Button
                                 variant="outline"
@@ -52,14 +78,51 @@ function ImageCarousel({ imageList }) {
                                 <Expand className="h-4 w-4" />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-4xl w-full p-0 bg-transparent border-none">
-                            <div className="relative w-full h-[80vh]">
+                        <DialogContent className="max-w-4xl w-[95vw] sm:w-full p-0 bg-transparent border-none">
+                            <DialogTitle className="sr-only">Business Image Gallery</DialogTitle>
+                            <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] group">
                                 <Image
                                     src={imageList[selectedImageIndex]?.url}
                                     fill
                                     alt={`Business image ${selectedImageIndex + 1} - Full size`}
                                     className="object-contain"
                                 />
+                                
+                                {/* Navigation Controls in Expanded View */}
+                                {imageList.length > 1 && (
+                                    <>
+                                        {/* Previous Button */}
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border/50 hover:bg-background opacity-80 hover:opacity-100 transition-all duration-300 z-10"
+                                            onClick={() => setSelectedImageIndex(prev => 
+                                                prev === 0 ? imageList.length - 1 : prev - 1
+                                            )}
+                                        >
+                                            <ChevronLeft className="h-5 w-5" />
+                                        </Button>
+                                        
+                                        {/* Next Button */}
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border/50 hover:bg-background opacity-80 hover:opacity-100 transition-all duration-300 z-10"
+                                            onClick={() => setSelectedImageIndex(prev => 
+                                                prev === imageList.length - 1 ? 0 : prev + 1
+                                            )}
+                                        >
+                                            <ChevronRight className="h-5 w-5" />
+                                        </Button>
+                                    </>
+                                )}
+
+                                {/* Image Counter in Expanded View */}
+                                <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-border/50 opacity-80 hover:opacity-100 transition-opacity duration-300">
+                                    <span className="text-sm font-medium text-foreground">
+                                        {selectedImageIndex + 1} / {imageList.length}
+                                    </span>
+                                </div>
                             </div>
                         </DialogContent>
                     </Dialog>
@@ -70,7 +133,7 @@ function ImageCarousel({ imageList }) {
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
                                 onClick={() => setSelectedImageIndex(prev => 
                                     prev === 0 ? imageList.length - 1 : prev - 1
                                 )}
@@ -80,7 +143,7 @@ function ImageCarousel({ imageList }) {
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
                                 onClick={() => setSelectedImageIndex(prev => 
                                     prev === imageList.length - 1 ? 0 : prev + 1
                                 )}
@@ -91,7 +154,7 @@ function ImageCarousel({ imageList }) {
                     )}
 
                     {/* Image Counter */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-4 py-2 border border-border/50">
+                    <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-border/50">
                         <span className="text-sm font-medium text-foreground">
                             {selectedImageIndex + 1} / {imageList.length}
                         </span>
@@ -102,13 +165,13 @@ function ImageCarousel({ imageList }) {
             {/* Thumbnail Carousel */}
             {imageList.length > 1 && (
                 <div className="space-y-3">
-                    <h3 className="text-lg font-semibold text-foreground">All Images</h3>
+                    <h3 className="text-base sm:text-lg font-semibold text-foreground">All Images</h3>
                     <Carousel className="w-full">
-                        <CarouselContent className="-ml-2">
+                        <CarouselContent className="-ml-1 sm:-ml-2">
                             {imageList.map((item, index) => (
-                                <CarouselItem key={index} className="pl-2 basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/6">
+                                <CarouselItem key={index} className="pl-1 sm:pl-2 basis-1/4 sm:basis-1/4 md:basis-1/5 lg:basis-1/6">
                                     <div 
-                                        className={`relative h-20 w-full overflow-hidden rounded-xl cursor-pointer border-2 transition-all duration-300 ${
+                                        className={`relative h-16 sm:h-20 w-full overflow-hidden rounded-lg sm:rounded-xl cursor-pointer border-2 transition-all duration-300 ${
                                             selectedImageIndex === index 
                                                 ? 'border-primary shadow-lg ring-2 ring-primary/20' 
                                                 : 'border-border/50 hover:border-primary/50'
