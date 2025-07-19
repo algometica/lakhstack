@@ -1,14 +1,12 @@
 # CLAUDE.md
 
-## Commands
-**Package Manager**: PNPM
-- `pnpm dev` - Development server
+## Commands (PNPM)
+- `pnpm dev` - Dev server
 - `pnpm build` - Production build  
 - `pnpm lint` - ESLint
-- `pnpm setup` - Install & build
-- `node scripts/setup-admin.js` - Setup database & admin
+- `node scripts/setup-admin.js` - DB & admin setup
 
-## Environment (.env.local)
+## Environment
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_API_KEY=your_supabase_anon_key  
@@ -20,40 +18,24 @@ AUTH_SECRET=your_nextauth_secret
 ADMIN_EMAIL=admin@example.com
 ```
 
-## Architecture
-- **Auth**: NextAuth.js v5 + Google OAuth + Supabase adapter
-- **Database**: Supabase (NextAuth tables + custom `listings` table)
-- **Admin Platform**: Curated content, admin whitelist via JWT
-- **API**: Google Places API (New) REST endpoints for addresses
+## Stack
+**Auth**: NextAuth.js v5 + Google OAuth + Supabase  
+**DB**: Supabase (NextAuth + custom tables)  
+**API**: Google Places API (New)  
+**UI**: Next.js 15 App Router, shadcn/ui, Tailwind CSS
 
-## Route Structure
+## Routes
 - **Public**: `/`, `/all-listings`, `/view-listing/[id]`
-- **Protected**: `/add-new-listing`, `/edit-listing/[id]`, `/user`
+- **Protected**: `/add-new-listing`, `/edit-listing/[id]`, `/user`  
 - **Admin**: `/admin` (admin role required)
-- **Auth**: `/auth/signin` (redirects admins to `/admin`)
 
-## Key Patterns
-- **Admin-curated platform**: Only whitelisted admins create listings
-- **App Router**: Next.js 15 with `(auth)` and `(routes)` groups
-- **Component co-location**: `_components` folders
-- **Server auth**: NextAuth middleware protection
-- **Modern stack**: JavaScript (not TypeScript), PNPM, shadcn/ui
+## Patterns
+- Admin-curated platform (whitelisted admins only)
+- Component co-location (`_components` folders)
+- NextAuth middleware protection
+- Modern JS stack (no TypeScript)
 
-## Common Tasks
-### Adding Protected Routes
-1. Add to `protectedRoutes` in `middleware.js`
-2. Use `useSession()` for auth state
-
-### Adding Admin Features  
-1. Add to `adminRoutes` in `middleware.js`
-2. Check `user.role === 'admin'` in components
-
-### Database Operations
-- Use Supabase service role for admin operations
-- NextAuth handles auth tables, custom tables for business logic
-
-## Recent Migrations
-- Clerk → NextAuth.js authentication
-- TypeScript → JavaScript for consistency  
-- Legacy Google Places → Google Places API (New)
-- NPM → PNPM package manager
+## Key Tasks
+**Protected Routes**: Add to `middleware.js` + `useSession()`  
+**Admin Features**: Add to `adminRoutes` + check `user.role === 'admin'`  
+**Database**: Supabase service role for admin ops
