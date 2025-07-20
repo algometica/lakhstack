@@ -41,18 +41,18 @@ function Hero() {
                     </div>
 
                     {/* Trust Indicators */}
-                    <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-primary">100%</div>
-                            <div className="text-sm font-medium text-muted-foreground">Unbiased</div>
+                    <div className="mt-16 flex flex-row justify-center items-center gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                        <div className="text-center flex-1 min-w-0">
+                            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary">100%</div>
+                            <div className="text-xs sm:text-sm font-medium text-muted-foreground">Unbiased</div>
                         </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-cyber">Local</div>
-                            <div className="text-sm font-medium text-muted-foreground">Community Focus</div>
+                        <div className="text-center flex-1 min-w-0">
+                            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-cyber">Local</div>
+                            <div className="text-xs sm:text-sm font-medium text-muted-foreground">Community Focus</div>
                         </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-neural">Verified</div>
-                            <div className="text-sm font-medium text-muted-foreground">Authentic Reviews</div>
+                        <div className="text-center flex-1 min-w-0">
+                            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-neural">Verified</div>
+                            <div className="text-xs sm:text-sm font-medium text-muted-foreground">Authentic Reviews</div>
                         </div>
                     </div>
 

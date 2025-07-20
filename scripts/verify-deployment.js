@@ -49,7 +49,7 @@ async function checkEnvironment() {
     console.log(`   GOOGLE_CLIENT_ID: ${response.hasGoogleClientId ? '✅' : '❌'}`);
     console.log(`   GOOGLE_CLIENT_SECRET: ${response.hasGoogleClientSecret ? '✅' : '❌'}`);
     console.log(`   AUTH_SECRET: ${response.hasAuthSecret ? '✅' : '❌'}`);
-    console.log(`   GOOGLE_PLACES_API_KEY: ${response.hasGooglePlacesApiKey ? '✅' : '❌'}`);
+    console.log(`   GOOGLE_PLACE_API_KEY: ${response.hasGooglePlacesApiKey ? '✅' : '❌'}`);
     console.log(`   GOOGLE_MAPS_API_KEY: ${response.hasGoogleMapsApiKey ? '✅' : '❌'}`);
     console.log(`   SUPABASE_URL: ${response.hasSupabaseUrl ? '✅' : '❌'}`);
     console.log(`   SUPABASE_API_KEY: ${response.hasSupabaseApiKey ? '✅' : '❌'}`);
