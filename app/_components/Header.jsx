@@ -1,9 +1,9 @@
 "use client";
 
-import { Plus, Settings } from 'lucide-react'
+import { Plus, Settings, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
@@ -22,6 +22,7 @@ import {
 function Header() {
   const path = usePathname();
   const { data: session, status } = useSession();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const user = session?.user;
   const isAuthenticated = !!session;
@@ -29,6 +30,8 @@ function Header() {
 
   useEffect(() => {
     console.log(path)
+    // Close mobile menu when path changes
+    setIsMobileMenuOpen(false);
   }, [path])
 
   const handleLogout = async () => {
@@ -42,6 +45,7 @@ function Header() {
           <span className="text-xl font-black" style={{ color: '#db4a2b' }}>LakhStack</span>
         </Link>
         
+        {/* Desktop Navigation */}
         <nav className='hidden md:flex gap-1'>
           <Link href={'/'}>
             <div className={`transition-all duration-300 px-4 py-2 rounded-xl font-semibold text-sm cursor-pointer
@@ -62,6 +66,16 @@ function Header() {
             </div>
           </Link>
         </nav>
+        
+        {/* Mobile Menu Button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className='md:hidden h-9 w-9 hover:bg-muted/50'
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
+        </Button>
       </div>
       <div className='flex gap-3 items-center' id="navbar-default">
         <ThemeToggle />
@@ -120,6 +134,32 @@ function Header() {
           null
         )}
       </div>
+      
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className='md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-lg'>
+          <nav className='flex flex-col p-4 gap-2'>
+            <Link href={'/'} onClick={() => setIsMobileMenuOpen(false)}>
+              <div className={`transition-all duration-300 px-4 py-3 rounded-xl font-semibold text-sm cursor-pointer w-full text-center
+                ${path === '/' 
+                  ? 'text-primary bg-primary/10 border border-primary/20' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                }`}>
+                Featured
+              </div>
+            </Link>
+            <Link href={'/all-listings'} onClick={() => setIsMobileMenuOpen(false)}>
+              <div className={`transition-all duration-300 px-4 py-3 rounded-xl font-semibold text-sm cursor-pointer w-full text-center
+                ${path === '/all-listings' 
+                  ? 'text-primary bg-primary/10 border border-primary/20' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                }`}>
+                All Listings
+              </div>
+            </Link>
+          </nav>
+        </div>
+      )}
     </div >
   )
 }
