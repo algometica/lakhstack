@@ -66,18 +66,18 @@ function Header() {
             </div>
           </Link>
         </nav>
-        
-        {/* Mobile Menu Button */}
+      </div>
+      <div className='flex gap-3 items-center' id="navbar-default">
+        {/* Mobile Menu Button - positioned with other controls */}
         <Button 
           variant="ghost" 
           size="icon" 
-          className='md:hidden h-9 w-9 hover:bg-muted/50'
+          className='md:hidden h-10 w-10 hover:bg-muted/50 transition-all duration-300'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
         </Button>
-      </div>
-      <div className='flex gap-3 items-center' id="navbar-default">
+        
         <ThemeToggle />
         
         {isAuthenticated && isAdmin && (
