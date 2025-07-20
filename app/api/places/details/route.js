@@ -13,7 +13,7 @@ export async function POST(request) {
         }
 
         // Get the origin from the request headers
-        const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:3000';
+        const origin = request.headers.get('origin') || request.headers.get('referer') || process.env.NEXTAUTH_URL || 'https://www.lakhstack.com';
 
         // Using Google Places API (New) - Place Details (New)
         const data = await makeGooglePlacesRequest(`https://places.googleapis.com/v1/places/${placeId}`, {

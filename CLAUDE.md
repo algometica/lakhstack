@@ -17,6 +17,7 @@ GOOGLE_MAPS_API_KEY=your_google_maps_key
 GOOGLE_CLIENT_ID=your_google_oauth_id
 GOOGLE_CLIENT_SECRET=your_google_oauth_secret
 AUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=https://www.lakhstack.com
 ADMIN_EMAIL=admin@example.com
 ```
 

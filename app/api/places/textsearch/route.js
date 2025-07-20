@@ -15,7 +15,7 @@ export async function POST(request) {
         console.log('Making request to Google Places Text Search API with input:', input);
 
         // Get the origin from the request headers
-        const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:3000';
+        const origin = request.headers.get('origin') || request.headers.get('referer') || process.env.NEXTAUTH_URL || 'https://www.lakhstack.com';
 
         // Using Google Places API (New) - Text Search (New)
         const data = await makeGooglePlacesRequest('https://places.googleapis.com/v1/places:searchText', {
