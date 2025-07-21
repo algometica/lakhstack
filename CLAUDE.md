@@ -1,11 +1,11 @@
 # CLAUDE.md
 
-## Commands (PNPM)
+## Commands
 - `pnpm dev` - Dev server
 - `pnpm build` - Production build  
 - `pnpm lint` - ESLint
 - `node scripts/setup-admin.js` - DB & admin setup
-- `node scripts/verify-deployment.js [domain]` - Check deployment env vars
+- `node scripts/verify-deployment.js [domain]` - Check deployment
 
 ## Environment
 ```
@@ -22,23 +22,25 @@ ADMIN_EMAIL=admin@example.com
 ```
 
 ## Stack
-**Auth**: NextAuth.js v5 + Google OAuth + Supabase  
-**DB**: Supabase (NextAuth + custom tables)  
+**Auth**: NextAuth.js v5 + Google OAuth  
+**DB**: Supabase (PostgreSQL)  
 **API**: Google Places API (New)  
-**UI**: Next.js 15 App Router, shadcn/ui, Tailwind CSS
+**UI**: Next.js 15 App Router, shadcn/ui, Tailwind
 
 ## Routes
 - **Public**: `/`, `/all-listings`, `/view-listing/[id]`
 - **Protected**: `/add-new-listing`, `/edit-listing/[id]`, `/user`  
 - **Admin**: `/admin` (admin role required)
 
-## Patterns
+## Architecture
 - Admin-curated platform (whitelisted admins only)
 - Component co-location (`_components` folders)
 - NextAuth middleware protection
-- Modern JS stack (no TypeScript)
+- Geographical filtering with 50km radius (PostgreSQL function: `get_listings_within_radius`)
+- Mobile-responsive with hamburger navigation
 
 ## Key Tasks
 **Protected Routes**: Add to `middleware.js` + `useSession()`  
-**Admin Features**: Add to `adminRoutes` + check `user.role === 'admin'`  
-**Database**: Supabase service role for admin ops
+**Admin Features**: Add to admin whitelist + check `user.role === 'admin'`  
+**Database**: Use Supabase service role for admin operations  
+**Location Search**: Coordinates stored as JSON, filtered via PostgreSQL Haversine formula

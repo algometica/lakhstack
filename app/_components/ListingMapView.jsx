@@ -48,84 +48,13 @@ function ListingMapView({ featured }) {
     console.log('searchedAddress:', searchedAddress)
     console.log('coordinates:', coordinates)
 
+    // Get all active listings first
     let query = supabase
       .from('listing')
       .select('*, listing_images(url, listing_id)')
       .eq('active', true);
 
-    // Apply location-based filtering if coordinates are available
-    if (coordinates && coordinates.lat && coordinates.lng) {
-      // Use PostgreSQL's earth distance calculation for geographical filtering
-      // This filters listings within approximately 50km radius
-      const radiusInKm = 50;
-      
-      // Using PostGIS ST_DWithin function for distance filtering
-      // Note: We need to convert coordinates to Point format
-      query = query.rpc('get_listings_within_radius', {
-        search_lat: coordinates.lat,
-        search_lng: coordinates.lng,
-        radius_km: radiusInKm
-      });
-    } else {
-      // Fallback to address text search if no coordinates
-      const searchTerm = searchedAddress?.value?.structured_formatting?.main_text || 
-                        searchedAddress?.label;
-      
-      if (searchTerm) {
-        // Try multiple fields for better matching
-        query = query.or(`address.ilike.%${searchTerm}%,business_name.ilike.%${searchTerm}%,desc.ilike.%${searchTerm}%`);
-      }
-      
-      query = query.order('id', { ascending: false });
-    }
-
-    // Apply additional filters
-    if (industryType) {
-      query = query.eq('industry', industryType)
-    }
-    if (categoryType) {
-      query = query.eq('category', categoryType)
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      console.error('Database query error:', error);
-      // Fallback to simple query if RPC function doesn't exist
-      if (error.code === '42883') { // Function does not exist
-        console.log('Falling back to simple coordinate filtering');
-        await handleSearchClickFallback();
-        return;
-      }
-      toast('Error searching listings');
-      return;
-    }
-
-    if (data) {
-      console.log('Found listings:', data.length);
-      setListing(data)
-    }
-  }
-
-  // Fallback method using basic coordinate comparison
-  const handleSearchClickFallback = async () => {
-    console.log('Using fallback coordinate filtering');
-    
-    let query = supabase
-      .from('listing')
-      .select('*, listing_images(url, listing_id)')
-      .eq('active', true);
-
-    // Apply text-based location search as fallback
-    if (coordinates || searchedAddress) {
-      const searchTerm = searchedAddress?.value?.structured_formatting?.main_text || 
-                        searchedAddress?.label;
-      
-      if (searchTerm) {
-        query = query.or(`address.ilike.%${searchTerm}%,business_name.ilike.%${searchTerm}%`);
-      }
-    }
-
+    // Apply industry and category filters at database level
     if (industryType) {
       query = query.eq('industry', industryType)
     }
@@ -137,12 +66,26 @@ function ListingMapView({ featured }) {
 
     const { data, error } = await query;
 
+    if (error) {
+      console.error('Database query error:', error);
+      toast('Error searching listings');
+      return;
+    }
+
     if (data) {
-      // If we have coordinates, do client-side distance filtering
+      console.log('Raw listings from database:', data.length);
+      
+      // Apply location filtering on the client side
+      let filteredListings = data;
+      
       if (coordinates && coordinates.lat && coordinates.lng) {
-        const filteredData = data.filter(listing => {
+        console.log('Applying coordinate-based filtering...');
+        
+        filteredListings = data.filter(listing => {
+          // Skip listings without coordinates
           if (!listing.coordinates || !listing.coordinates.lat || !listing.coordinates.lng) {
-            return false; // Skip listings without coordinates
+            console.log(`Skipping listing "${listing.business_name}" - no coordinates`);
+            return false;
           }
           
           // Calculate distance using Haversine formula
@@ -151,21 +94,40 @@ function ListingMapView({ featured }) {
             listing.coordinates.lat, listing.coordinates.lng
           );
           
-          return distance <= 50; // 50km radius
+          console.log(`Listing "${listing.business_name}": ${distance.toFixed(2)}km away`);
+          
+          // Include listings within 50km radius
+          const isWithinRadius = distance <= 50;
+          return isWithinRadius;
         });
         
-        console.log(`Filtered ${data.length} listings to ${filteredData.length} within 50km`);
-        setListing(filteredData);
-      } else {
-        setListing(data);
+        console.log(`Filtered ${data.length} listings to ${filteredListings.length} within 50km of search location`);
+        
+      } else if (searchedAddress) {
+        // Text-based filtering as fallback
+        const searchTerm = searchedAddress?.value?.structured_formatting?.main_text || 
+                          searchedAddress?.label;
+        
+        if (searchTerm) {
+          console.log('Applying text-based filtering for:', searchTerm);
+          
+          filteredListings = data.filter(listing => {
+            const matchesAddress = listing.address && listing.address.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesName = listing.business_name && listing.business_name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesDesc = listing.business_desc && listing.business_desc.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            return matchesAddress || matchesName || matchesDesc;
+          });
+          
+          console.log(`Text-filtered ${data.length} listings to ${filteredListings.length} matching "${searchTerm}"`);
+        }
       }
-    }
-
-    if (error) {
-      console.error('Fallback query error:', error);
-      toast('Error searching listings');
+      
+      console.log('Final listings to display:', filteredListings.length);
+      setListing(filteredListings);
     }
   }
+
 
   // Haversine formula to calculate distance between two points
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
