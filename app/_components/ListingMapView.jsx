@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Listing from './Listing'
 import { supabase } from '@/utils/supabase/client'
 import { toast } from 'sonner';
@@ -15,17 +15,16 @@ function ListingMapView({ featured }) {
   const [categoryType, setCategoryType] = useState();
 
 
+
   useEffect(() => {
     getLatestListing();
   }, [featured])
 
   useEffect(() => {
-    if (industryType !== undefined || categoryType !== undefined) {
-      handleSearchClick();
-    }
-  }, [industryType, categoryType, searchedAddress])
+    handleSearchClick();
+  }, [coordinates, searchedAddress, industryType, categoryType])
 
-  const getLatestListing = async () => {
+  const getLatestListing = useCallback(async () => {
     const { data, error } = await supabase
       .from('listing')
       .select('*, listing_images(url, listing_id)')
@@ -34,19 +33,18 @@ function ListingMapView({ featured }) {
       .order('id', { ascending: false })
 
     if (data) {
-      console.log(data)
       setListing(data);
     }
     if (error) {
       toast('Server Side Error')
     }
-  }
+  }, [featured])
 
-  const handleSearchClick = async () => {
-
-    console.log('handleSearchClick')
-    console.log('searchedAddress:', searchedAddress)
-    console.log('coordinates:', coordinates)
+  const handleSearchClick = useCallback(async () => {
+    if (!searchedAddress && !coordinates && !industryType && !categoryType) {
+      getLatestListing();
+      return;
+    }
 
     // Get all active listings first
     let query = supabase
@@ -73,18 +71,13 @@ function ListingMapView({ featured }) {
     }
 
     if (data) {
-      console.log('Raw listings from database:', data.length);
-      
-      // Apply location filtering on the client side
       let filteredListings = data;
       
+      // Apply geographical filtering if coordinates are available
       if (coordinates && coordinates.lat && coordinates.lng) {
-        console.log('Applying coordinate-based filtering...');
-        
         filteredListings = data.filter(listing => {
           // Skip listings without coordinates
           if (!listing.coordinates || !listing.coordinates.lat || !listing.coordinates.lng) {
-            console.log(`Skipping listing "${listing.business_name}" - no coordinates`);
             return false;
           }
           
@@ -94,14 +87,9 @@ function ListingMapView({ featured }) {
             listing.coordinates.lat, listing.coordinates.lng
           );
           
-          console.log(`Listing "${listing.business_name}": ${distance.toFixed(2)}km away`);
-          
           // Include listings within 50km radius
-          const isWithinRadius = distance <= 50;
-          return isWithinRadius;
+          return distance <= 50;
         });
-        
-        console.log(`Filtered ${data.length} listings to ${filteredListings.length} within 50km of search location`);
         
       } else if (searchedAddress) {
         // Text-based filtering as fallback
@@ -109,8 +97,6 @@ function ListingMapView({ featured }) {
                           searchedAddress?.label;
         
         if (searchTerm) {
-          console.log('Applying text-based filtering for:', searchTerm);
-          
           filteredListings = data.filter(listing => {
             const matchesAddress = listing.address && listing.address.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesName = listing.business_name && listing.business_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -118,15 +104,12 @@ function ListingMapView({ featured }) {
             
             return matchesAddress || matchesName || matchesDesc;
           });
-          
-          console.log(`Text-filtered ${data.length} listings to ${filteredListings.length} matching "${searchTerm}"`);
         }
       }
       
-      console.log('Final listings to display:', filteredListings.length);
       setListing(filteredListings);
     }
-  }
+  }, [searchedAddress, coordinates, industryType, categoryType])
 
 
   // Haversine formula to calculate distance between two points

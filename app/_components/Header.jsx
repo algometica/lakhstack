@@ -29,7 +29,6 @@ function Header() {
   const isAdmin = user?.role === 'admin' || user?.isAdmin;
 
   useEffect(() => {
-    console.log(path)
     // Close mobile menu when path changes
     setIsMobileMenuOpen(false);
   }, [path])

@@ -10,9 +10,6 @@ const containerStyle = {
 
 function GoogleMapSection({ coordinates, listing }) {
 
-  console.log("katre Kaka")
-  console.log(coordinates)
-
   const [center, setCenter] = useState({
     lat: coordinates.lat,
     lng: coordinates.lng

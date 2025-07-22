@@ -1,17 +1,24 @@
 "use client";
 
 import { MapPin, X } from 'lucide-react';
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-function GoogleAddressSearch({ selectedAddress, setCoordinates }) {
+function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) {
     const [inputValue, setInputValue] = useState('');
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [showPredictions, setShowPredictions] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const debounceRef = useRef(null);
+
+    // Clear search when parent triggers it
+    useEffect(() => {
+        if (clearTrigger > 0) {
+            clearSelection();
+        }
+    }, [clearTrigger]);
 
     // Use Google Places API (New) REST endpoints directly
     const searchPlaces = async (input) => {
@@ -37,7 +44,6 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates }) {
 
             // If autocomplete fails, try text search as fallback
             if (!response.ok) {
-                console.log('Autocomplete failed, trying text search...');
                 response = await fetch('/api/places/textsearch', {
                     method: 'POST',
                     headers: {
@@ -68,6 +74,12 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates }) {
             console.error('Error fetching place predictions:', error);
             setPredictions([]);
             setShowPredictions(false);
+            
+            // Show user-friendly error for timeout/network issues
+            if (error.message.includes('timeout') || error.message.includes('network') || error.name === 'AbortError') {
+                // Could add a toast notification here if needed
+                console.log('Location search temporarily unavailable due to network issues');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -128,6 +140,11 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates }) {
             }
         } catch (error) {
             console.error('Error fetching place details:', error);
+            
+            // Show user-friendly error for timeout/network issues
+            if (error.message.includes('timeout') || error.message.includes('network') || error.name === 'AbortError') {
+                console.log('Location details temporarily unavailable due to network issues');
+            }
         }
     };
 

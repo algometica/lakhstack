@@ -12,23 +12,18 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
 }) {
 
     const [address, setAddress] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const [clearSearchTrigger, setClearSearchTrigger] = useState(0);
 
     return (
         <div>
             <div className='bg-card rounded-xl shadow-sm border border-border p-4 md:p-6 mb-6'>
-                <div className='flex flex-col md:flex-row gap-4'>
-                    <div className='flex-1'>
-                        <GoogleAddressSearch
-                            selectedAddress={(value) => { searchedAddress(value); setAddress(value) }}
-                            setCoordinates={setCoordinates}
-                        />
-                    </div>
-                    <Button className='flex gap-2 px-6 h-12 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-colors duration-200'
-                        onClick={handleSearchClick}
-                    >
-                        <Search className='h-4 w-4' />
-                        Search
-                    </Button>
+                <div className='w-full'>
+                    <GoogleAddressSearch
+                        selectedAddress={(value) => { searchedAddress(value); setAddress(value) }}
+                        setCoordinates={setCoordinates}
+                        clearTrigger={clearSearchTrigger}
+                    />
                 </div>
             </div>
 
@@ -41,11 +36,19 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
 
             {address &&
                 <div className='bg-primary/5 rounded-xl p-4 mb-6 border border-primary/20'>
-                    <h2 className='text-lg text-foreground'>Found <span className='font-bold text-primary'>{listing.length}</span> {listing.length === 1 ? 'listing' : 'listings'} in <span className='text-primary font-bold'>{address?.label || 'selected location'}</span></h2>
+                    <h2 className='text-lg text-foreground'>Found <span className='font-bold text-primary'>{listing.length}</span> {listing.length === 1 ? 'listing' : 'listings'} near <span className='text-primary font-bold'>{address?.label || 'selected location'}</span> <span className='text-sm text-muted-foreground font-normal'>(within 50km)</span></h2>
                 </div>
             }
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6'>
-                {listing?.length > 0 ? listing?.map((item, index) => (
+            {/* Results Grid */}
+            {listing?.length > 0 ? (
+                <>
+                {!address && (
+                    <div className='bg-primary/5 rounded-xl p-4 mb-6 border border-primary/20'>
+                        <h2 className='text-lg text-foreground'>Showing <span className='font-bold text-primary'>{listing.length}</span> {listing.length === 1 ? 'listing' : 'listings'}</h2>
+                    </div>
+                )}
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6'>
+                    {listing?.map((item, index) => (
                     <Link key={item.id || index} href={'/view-listing/' + item.id}>
                         <div className='group bg-card rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-border overflow-hidden'>
                             <div className='relative overflow-hidden'>
@@ -81,8 +84,49 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
                             </div>
                         </div>
                     </Link>
-                )) // skeleton effect for that quick load
-                    : [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+                    ))}
+                </div>
+                </>
+            ) : address ? (
+                /* No Results State */
+                <div className='bg-card rounded-xl shadow-sm border border-border p-8 md:p-12 text-center'>
+                    <div className='max-w-md mx-auto'>
+                        <div className='w-20 h-20 mx-auto mb-6 bg-muted/30 rounded-full flex items-center justify-center'>
+                            <MapPin className='h-10 w-10 text-muted-foreground' />
+                        </div>
+                        <h3 className='text-xl font-semibold text-foreground mb-3'>
+                            No businesses found in {address?.label}
+                        </h3>
+                        <p className='text-muted-foreground mb-6'>
+                            We couldn't find any listings in this location. Try searching in a nearby city or explore all listings.
+                        </p>
+                        <div className='flex flex-col sm:flex-row gap-3 justify-center'>
+                            <Button 
+                                variant="outline" 
+                                onClick={() => { 
+                                    setAddress(null); 
+                                    searchedAddress(null); 
+                                    setCoordinates(null); 
+                                    setClearSearchTrigger(prev => prev + 1);
+                                }}
+                                className='flex gap-2 w-full sm:w-auto'
+                            >
+                                <Search className='h-4 w-4' />
+                                Clear Search
+                            </Button>
+                            <Link href='/all-listings'>
+                                <Button className='flex gap-2 w-full sm:w-auto'>
+                                    <MapPin className='h-4 w-4' />
+                                    View All Listings
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            ) : !address && listing?.length === 0 ? (
+                /* Loading Skeleton - only show when initially loading */
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6'>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
                         <div key={index} className='bg-card rounded-xl shadow-sm border border-border overflow-hidden'>
                             <div className='h-48 sm:h-52 bg-muted animate-pulse'></div>
                             <div className='p-4 space-y-3'>
@@ -95,7 +139,8 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
                             </div>
                         </div>
                     ))}
-            </div>
+                </div>
+            ) : null}
         </div>
     )
 }

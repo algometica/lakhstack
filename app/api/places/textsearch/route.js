@@ -12,7 +12,6 @@ export async function POST(request) {
             );
         }
 
-        console.log('Making request to Google Places Text Search API with input:', input);
 
         // Get the origin from the request headers
         const origin = request.headers.get('origin') || request.headers.get('referer') || process.env.NEXTAUTH_URL || 'https://www.lakhstack.com';
