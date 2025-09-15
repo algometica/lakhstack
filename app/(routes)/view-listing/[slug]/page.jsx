@@ -18,6 +18,7 @@ function ViewListingBySlug() {
     const [listing, setListing] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const [redirectCount, setRedirectCount] = useState(0)
 
     useEffect(() => {
         if (params.slug) {
@@ -25,18 +26,34 @@ function ViewListingBySlug() {
         }
     }, [params.slug])
 
+    // Add timeout to prevent infinite loading
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (loading) {
+                console.log('⏰ Loading timeout reached')
+                setError('Loading timeout - please try again')
+                setLoading(false)
+            }
+        }, 10000) // 10 second timeout
+
+        return () => clearTimeout(timeout)
+    }, [loading])
+
     const getListingBySlug = async (slug) => {
         try {
             setLoading(true)
             setError('')
+            console.log('🔍 Fetching listing for slug:', slug)
 
             let listing = null;
 
             // Check if the slug is actually a numeric ID (for backward compatibility)
             const isNumericId = /^\d+$/.test(slug);
+            console.log('📊 Is numeric ID:', isNumericId)
             
             if (isNumericId) {
                 // Handle old ID-based URLs
+                console.log('🔢 Fetching by ID:', parseInt(slug))
                 const { data: idData, error: idError } = await supabase
                     .from('listing')
                     .select('*, listing_images(url, listing_id)')
@@ -44,17 +61,22 @@ function ViewListingBySlug() {
                     .eq('active', true)
                     .single()
 
+                console.log('📊 ID query result:', { data: idData, error: idError })
+
                 if (idData && !idError) {
                     listing = idData;
                     
-                    // Redirect to slug-based URL if slug exists
-                    if (listing.slug) {
+                    // Redirect to slug-based URL if slug exists (prevent infinite redirects)
+                    if (listing.slug && redirectCount < 2) {
+                        console.log('🔄 Redirecting to slug:', listing.slug, 'Redirect count:', redirectCount)
+                        setRedirectCount(prev => prev + 1)
                         router.replace(`/view-listing/${listing.slug}`)
                         return
                     }
                 }
             } else {
                 // Handle slug-based URLs
+                console.log('🔤 Fetching by slug:', slug)
                 // First, try to find by exact slug match
                 const { data: slugData, error: slugError } = await supabase
                     .from('listing')
@@ -63,13 +85,17 @@ function ViewListingBySlug() {
                     .eq('active', true)
                     .single()
 
+                console.log('📊 Slug query result:', { data: slugData, error: slugError })
+
                 if (slugData && !slugError) {
                     listing = slugData;
                 } else {
                     // If not found by slug, try extracting ID from slug (for ID-suffixed slugs)
                     const listingId = extractIdFromSlug(slug)
+                    console.log('🔍 Extracted ID from slug:', listingId)
                     
                     if (listingId) {
+                        console.log('🔢 Fetching by extracted ID:', listingId)
                         const { data: idData, error: idError } = await supabase
                             .from('listing')
                             .select('*, listing_images(url, listing_id)')
@@ -77,11 +103,15 @@ function ViewListingBySlug() {
                             .eq('active', true)
                             .single()
 
+                        console.log('📊 Extracted ID query result:', { data: idData, error: idError })
+
                         if (idData && !idError) {
                             listing = idData;
                             
-                            // If we found by ID but the slug doesn't match, redirect to correct slug
-                            if (listing.slug && listing.slug !== slug) {
+                            // If we found by ID but the slug doesn't match, redirect to correct slug (prevent infinite redirects)
+                            if (listing.slug && listing.slug !== slug && redirectCount < 2) {
+                                console.log('🔄 Redirecting to correct slug:', listing.slug, 'Redirect count:', redirectCount)
+                                setRedirectCount(prev => prev + 1)
                                 router.replace(`/view-listing/${listing.slug}`)
                                 return
                             }
@@ -90,17 +120,22 @@ function ViewListingBySlug() {
                 }
             }
 
+            console.log('📋 Final listing result:', listing)
+
             if (!listing) {
+                console.log('❌ No listing found')
                 setError('Listing not found')
                 return
             }
 
+            console.log('✅ Setting listing data')
             setListing(listing)
 
         } catch (err) {
-            console.error('Unexpected error:', err)
+            console.error('💥 Unexpected error:', err)
             setError('Failed to load listing')
         } finally {
+            console.log('🏁 Loading complete')
             setLoading(false)
         }
     }
