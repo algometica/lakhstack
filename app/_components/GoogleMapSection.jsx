@@ -9,28 +9,49 @@ const containerStyle = {
 };
 
 function GoogleMapSection({ coordinates, listing }) {
-
   const [center, setCenter] = useState({
-    lat: coordinates.lat,
-    lng: coordinates.lng
+    lat: coordinates?.lat || 0,
+    lng: coordinates?.lng || 0
   })
   const [map, setMap] = React.useState(null)
 
+  // Load Google Maps API
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
+  })
+
   useEffect(() => {
-    coordinates && setCenter(coordinates)
+    if (coordinates) {
+      setCenter({
+        lat: coordinates.lat,
+        lng: coordinates.lng
+      })
+    }
   }, [coordinates])
 
   const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+    if (center.lat !== 0 && center.lng !== 0) {
+      const bounds = new window.google.maps.LatLngBounds(center);
+      map.fitBounds(bounds);
+    }
     setMap(map)
-
-  }, [])
+  }, [center])
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
   }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="w-full h-[60vh] bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading map...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -43,7 +64,7 @@ function GoogleMapSection({ coordinates, listing }) {
         gestureHandling="greedy"
       >
         { /* Child components, such as markers, info windows, etc. */}
-        {listing.map((item, index) => (
+        {listing && listing.map((item, index) => (
           <MarkerItem
             key={index}
             item={item}

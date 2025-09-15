@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Carousel,
     CarouselContent,
@@ -21,6 +21,13 @@ import {
 function ImageCarousel({ imageList }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    // Ensure selectedImageIndex is within bounds when imageList changes
+    useEffect(() => {
+        if (imageList && imageList.length > 0 && selectedImageIndex >= imageList.length) {
+            setSelectedImageIndex(0)
+        }
+    }, [imageList, selectedImageIndex])
 
     // Keyboard navigation for expanded view
     React.useEffect(() => {
@@ -44,7 +51,7 @@ function ImageCarousel({ imageList }) {
             document.addEventListener('keydown', handleKeyDown)
             return () => document.removeEventListener('keydown', handleKeyDown)
         }
-    }, [isDialogOpen, imageList.length])
+    }, [isDialogOpen, imageList?.length])
 
     if (!imageList || imageList.length === 0) {
         return (
@@ -60,7 +67,7 @@ function ImageCarousel({ imageList }) {
             <div className="relative group">
                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[500px] w-full overflow-hidden rounded-2xl border border-border/50 shadow-lg">
                     <Image
-                        src={imageList[selectedImageIndex]?.url || null}
+                        src={imageList?.[selectedImageIndex]?.url || null}
                         fill
                         alt={`Business image ${selectedImageIndex + 1}`}
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -82,14 +89,14 @@ function ImageCarousel({ imageList }) {
                             <DialogTitle className="sr-only">Business Image Gallery</DialogTitle>
                             <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] group">
                                 <Image
-                                    src={imageList[selectedImageIndex]?.url || null}
+                                    src={imageList?.[selectedImageIndex]?.url || null}
                                     fill
                                     alt={`Business image ${selectedImageIndex + 1} - Full size`}
                                     className="object-contain"
                                 />
                                 
                                 {/* Navigation Controls in Expanded View */}
-                                {imageList.length > 1 && (
+                                {imageList && imageList.length > 1 && (
                                     <>
                                         {/* Previous Button */}
                                         <Button
@@ -97,7 +104,7 @@ function ImageCarousel({ imageList }) {
                                             size="icon"
                                             className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border/50 hover:bg-background opacity-80 hover:opacity-100 transition-all duration-300 z-10"
                                             onClick={() => setSelectedImageIndex(prev => 
-                                                prev === 0 ? imageList.length - 1 : prev - 1
+                                                prev === 0 ? (imageList?.length || 1) - 1 : prev - 1
                                             )}
                                         >
                                             <ChevronLeft className="h-5 w-5" />
@@ -109,7 +116,7 @@ function ImageCarousel({ imageList }) {
                                             size="icon"
                                             className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-border/50 hover:bg-background opacity-80 hover:opacity-100 transition-all duration-300 z-10"
                                             onClick={() => setSelectedImageIndex(prev => 
-                                                prev === imageList.length - 1 ? 0 : prev + 1
+                                                prev === (imageList?.length || 1) - 1 ? 0 : prev + 1
                                             )}
                                         >
                                             <ChevronRight className="h-5 w-5" />
@@ -120,7 +127,7 @@ function ImageCarousel({ imageList }) {
                                 {/* Image Counter in Expanded View */}
                                 <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-border/50 opacity-80 hover:opacity-100 transition-opacity duration-300">
                                     <span className="text-sm font-medium text-foreground">
-                                        {selectedImageIndex + 1} / {imageList.length}
+                                        {selectedImageIndex + 1} / {imageList?.length || 0}
                                     </span>
                                 </div>
                             </div>
@@ -128,14 +135,14 @@ function ImageCarousel({ imageList }) {
                     </Dialog>
 
                     {/* Navigation Arrows for Main Image */}
-                    {imageList.length > 1 && (
+                    {imageList && imageList.length > 1 && (
                         <>
                             <Button
                                 variant="outline"
                                 size="icon"
                                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
                                 onClick={() => setSelectedImageIndex(prev => 
-                                    prev === 0 ? imageList.length - 1 : prev - 1
+                                    prev === 0 ? (imageList?.length || 1) - 1 : prev - 1
                                 )}
                             >
                                 <ChevronLeft className="h-4 w-4" />
@@ -145,7 +152,7 @@ function ImageCarousel({ imageList }) {
                                 size="icon"
                                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border-border/50 hover:bg-background opacity-0 group-hover:opacity-100 transition-all duration-300"
                                 onClick={() => setSelectedImageIndex(prev => 
-                                    prev === imageList.length - 1 ? 0 : prev + 1
+                                    prev === (imageList?.length || 1) - 1 ? 0 : prev + 1
                                 )}
                             >
                                 <ChevronRight className="h-4 w-4" />
@@ -156,14 +163,14 @@ function ImageCarousel({ imageList }) {
                     {/* Image Counter */}
                     <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 border border-border/50">
                         <span className="text-sm font-medium text-foreground">
-                            {selectedImageIndex + 1} / {imageList.length}
+                            {selectedImageIndex + 1} / {imageList?.length || 0}
                         </span>
                     </div>
                 </div>
             </div>
 
             {/* Thumbnail Carousel */}
-            {imageList.length > 1 && (
+            {imageList && imageList.length > 1 && (
                 <div className="space-y-3">
                     <h3 className="text-base sm:text-lg font-semibold text-foreground">All Images</h3>
                     <Carousel className="w-full">

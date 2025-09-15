@@ -542,7 +542,7 @@ export default function AdminPanel() {
 
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row flex-wrap gap-2">
-                          <Link href={`/view-listing/${listing.id}`}>
+                          <Link href={`/view-listing/${listing.slug || listing.id}`}>
                             <Button size="sm" variant="outline">
                               <Eye className="w-4 h-4 mr-1" />
                               View

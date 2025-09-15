@@ -8,6 +8,7 @@ import { Loader, MapPin, ArrowRight, AlertCircle, CheckCircle2, Building } from 
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner';
+import { generateListingSlug } from '@/lib/slug-utils';
 import {
   Alert,
   AlertDescription,
@@ -94,6 +95,24 @@ function AddNewListing() {
         try {
             const { city, country } = parseAddressComponents(selectedAddress.label);
 
+            // First, check if there are existing listings with the same address
+            const { data: existingListings, error: checkError } = await supabase
+                .from('listing')
+                .select('id, business_name, created_by, active')
+                .eq('address', selectedAddress.label);
+
+            if (checkError) {
+                console.error('Error checking existing listings:', checkError);
+            } else if (existingListings && existingListings.length > 0) {
+                // Show warning but still allow creation
+                console.log(`Found ${existingListings.length} existing listing(s) with the same address:`, existingListings);
+                toast.info(`Found ${existingListings.length} existing listing(s) with this address. Creating new listing anyway.`);
+            }
+
+            // Generate a temporary slug for the new listing
+            // We'll use a timestamp-based slug since we don't have business_name yet
+            const tempSlug = `listing-${Date.now()}`;
+
             const listingData = {
                 address: selectedAddress.label,
                 coordinates: coordinates,
@@ -101,7 +120,8 @@ function AddNewListing() {
                 country: country,
                 created_by: user?.email,
                 active: false, // Start as inactive until fully configured
-                featured: false
+                featured: false,
+                slug: tempSlug // Add the required slug field
             };
 
             const { data, error } = await supabase
@@ -115,9 +135,9 @@ function AddNewListing() {
                 if (error.code === '23505') {
                     // Unique constraint violation
                     if (error.message.includes('address')) {
-                        setError('This address already has a listing. Please use a different address.');
+                        setError('This address already has a listing. As an admin, you should be able to create multiple listings. Please contact support to fix database constraints.');
                     } else {
-                        setError('A listing with these details already exists. Please check your input.');
+                        setError('A listing with these details already exists. Please check your input or contact support if this is unexpected.');
                     }
                 } else if (error.code === '23503') {
                     // Foreign key constraint

@@ -95,7 +95,7 @@ function UserListing() {
                                 </h2>
                             </div>
                             <div className='flex gap-2 justify-between'>
-                                <Link href={'/view-listing/' + item.id} className="w-full">
+                                <Link href={`/view-listing/${item.slug || item.id}`} className="w-full">
                                     <Button size="sm" variant="outline">
                                         View</Button>
                                 </Link>

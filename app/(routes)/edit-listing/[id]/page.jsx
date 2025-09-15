@@ -18,6 +18,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
+import { generateListingSlug, generateSlug } from '@/lib/slug-utils'
 import { 
     Loader, 
     Save, 
@@ -225,6 +226,31 @@ function EditListing({ params }) {
                 return;
             }
 
+            // Generate slug if business name is provided
+            let slug = null;
+            if (formValue.business_name && formValue.business_name.trim()) {
+                try {
+                    // First, get existing slugs to check for conflicts
+                    const { data: existingSlugs, error: slugError } = await supabase
+                        .from('listing')
+                        .select('slug')
+                        .neq('id', resolvedParams.id);
+                    
+                    if (slugError) {
+                        console.warn('Error fetching existing slugs:', slugError);
+                        // If slug column doesn't exist yet, just generate a basic slug
+                        slug = generateSlug(formValue.business_name);
+                    } else {
+                        const slugs = existingSlugs?.map(item => item.slug).filter(Boolean) || [];
+                        slug = generateListingSlug(formValue.business_name, resolvedParams.id, slugs);
+                    }
+                } catch (err) {
+                    console.warn('Error generating slug:', err);
+                    // Fallback to basic slug generation
+                    slug = generateSlug(formValue.business_name);
+                }
+            }
+
             // Update the listing data - only include fields that exist in the database
             const updateData = {
                 business_name: formValue.business_name || '',
@@ -237,7 +263,8 @@ function EditListing({ params }) {
                 instagram_url: formValue.instagram_url || null,
                 business_email: formValue.business_email || null,
                 description: formValue.description || '',
-                featured: formValue.featured || false
+                featured: formValue.featured || false,
+                ...(slug && { slug }) // Only include slug if generated
             };
 
             
@@ -798,6 +825,7 @@ function EditListing({ params }) {
                                         <FileUpload
                                             setImages={(value) => setImages(value)}
                                             imageList={listing?.listing_images}
+                                            onImageDeleted={verifyUserRecord}
                                         />
                                     </div>
                                 </div>
