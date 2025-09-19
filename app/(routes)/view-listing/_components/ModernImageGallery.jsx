@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils'
 function ModernImageGallery({ imageList }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [isFullscreen, setIsFullscreen] = useState(false)
+    const [touchStart, setTouchStart] = useState(null)
+    const [touchEnd, setTouchEnd] = useState(null)
 
     // Ensure selectedImageIndex is within bounds when imageList changes
     useEffect(() => {
@@ -40,11 +42,42 @@ function ModernImageGallery({ imageList }) {
         )
     }
 
+    // Touch gesture handlers for mobile
+    const minSwipeDistance = 50
+
+    const onTouchStart = (e) => {
+        setTouchEnd(null)
+        setTouchStart(e.targetTouches[0].clientX)
+    }
+
+    const onTouchMove = (e) => {
+        setTouchEnd(e.targetTouches[0].clientX)
+    }
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return
+        const distance = touchStart - touchEnd
+        const isLeftSwipe = distance > minSwipeDistance
+        const isRightSwipe = distance < -minSwipeDistance
+
+        if (isLeftSwipe && imageList && imageList.length > 1) {
+            nextImage()
+        }
+        if (isRightSwipe && imageList && imageList.length > 1) {
+            prevImage()
+        }
+    }
+
     return (
         <div className="space-y-6">
             {/* Main Image Display */}
             <div className="relative group">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl">
+                <div 
+                    className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                >
                     <Image
                         src={imageList?.[selectedImageIndex]?.url || '/placeholder.svg'}
                         fill

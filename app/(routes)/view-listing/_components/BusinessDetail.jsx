@@ -11,12 +11,18 @@ function BusinessDetail({ listingDetail }) {
     return (
         <div className='flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center justify-between p-4 sm:p-5 rounded-lg shadow-md border my-2'>
             <div className='flex items-center gap-4 sm:gap-6 w-full sm:w-auto'>
-                <Image src={listingDetail?.profile_image || null}
-                    alt='profileImage'
-                    width={50}
-                    height={50}
-                    className='rounded-full w-12 h-12 sm:w-15 sm:h-15'
-                />
+                {listingDetail?.profile_image && listingDetail.profile_image.trim() !== '' ? (
+                    <Image src={listingDetail.profile_image}
+                        alt='profileImage'
+                        width={50}
+                        height={50}
+                        className='rounded-full w-12 h-12 sm:w-15 sm:h-15'
+                    />
+                ) : (
+                    <div className='rounded-full w-12 h-12 sm:w-15 sm:h-15 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg'>
+                        {listingDetail?.business_name?.charAt(0) || listingDetail?.full_name?.charAt(0) || 'B'}
+                    </div>
+                )}
                 <div className='flex-1 sm:flex-none'>
                     <h2 className='text-base sm:text-lg font-bold'>{listingDetail?.full_name}</h2>
                     <h2 className='text-sm sm:text-base text-muted-foreground break-words'>{contactEmail}</h2>

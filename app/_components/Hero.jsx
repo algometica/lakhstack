@@ -11,7 +11,7 @@ function Hero() {
                 <div className="mx-auto max-w-4xl text-center">
                     
                     {/* Main Heading - Bold and Authoritative */}
-                    <h1 className="text-6xl font-black tracking-tight text-foreground sm:text-8xl md:text-9xl lg:text-[10rem] leading-none">
+                    <h1 className="text-4xl font-black tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-none">
                         <span style={{ color: '#db4a2b' }}>LakhStack</span>
                     </h1>
                     

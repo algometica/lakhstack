@@ -37,7 +37,10 @@ import {
     Factory,
     Filter,
     ArrowLeft,
-    Mail
+    Mail,
+    Map,
+    Award,
+    Clock
 } from 'lucide-react'
 import {
     AlertDialog,
@@ -264,6 +267,9 @@ function EditListing({ params }) {
                 business_email: formValue.business_email || null,
                 description: formValue.description || '',
                 featured: formValue.featured || false,
+                show_map: formValue.show_map || false,
+                social_proof_enabled: formValue.social_proof_enabled || false,
+                urgency_enabled: formValue.urgency_enabled || false,
                 ...(slug && { slug }) // Only include slug if generated
             };
 
@@ -531,6 +537,9 @@ function EditListing({ params }) {
                         business_email: listing?.business_email || '',
                         description: listing?.description || '',
                         featured: listing?.featured || false,
+                        show_map: listing?.show_map || false,
+                        social_proof_enabled: listing?.social_proof_enabled || false,
+                        urgency_enabled: listing?.urgency_enabled || false,
                         profile_image: user?.imageUrl,
                         username: user?.fullName
                     };
@@ -703,6 +712,105 @@ function EditListing({ params }) {
                                                     <SelectItem value="$500+">$$$$ = $500+</SelectItem>
                                                 </SelectContent>
                                             </Select>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Display Options Toggles */}
+                                    <div className="mt-6 space-y-4">
+                                        {/* Map Display Toggle */}
+                                        <div className="bg-muted/30 rounded-xl p-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <Map className="w-6 h-6 text-primary" />
+                                                    <div>
+                                                        <h3 className="text-lg font-semibold text-foreground">Map Display</h3>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Show the "Find On Map" section on your listing page
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="sr-only peer"
+                                                            checked={values.show_map || false}
+                                                            onChange={(e) => setFieldValue('show_map', e.target.checked)}
+                                                        />
+                                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="mt-3 text-xs text-muted-foreground">
+                                                {values.show_map 
+                                                    ? "✓ Map section will be visible to visitors" 
+                                                    : "Map section will be hidden from visitors"
+                                                }
+                                            </div>
+                                        </div>
+
+                                        {/* Social Proof Toggle */}
+                                        <div className="bg-muted/30 rounded-xl p-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <Award className="w-6 h-6 text-green-600" />
+                                                    <div>
+                                                        <h3 className="text-lg font-semibold text-foreground">Social Proof Section</h3>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Show "Trusted by Community" section with ratings and reviews
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="sr-only peer"
+                                                            checked={values.social_proof_enabled || false}
+                                                            onChange={(e) => setFieldValue('social_proof_enabled', e.target.checked)}
+                                                        />
+                                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="mt-3 text-xs text-muted-foreground">
+                                                {values.social_proof_enabled 
+                                                    ? "✓ Social proof section will be visible to visitors" 
+                                                    : "Social proof section will be hidden from visitors"
+                                                }
+                                            </div>
+                                        </div>
+
+                                        {/* Urgency/Scarcity Toggle */}
+                                        <div className="bg-muted/30 rounded-xl p-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <Clock className="w-6 h-6 text-orange-600" />
+                                                    <div>
+                                                        <h3 className="text-lg font-semibold text-foreground">Urgency Section</h3>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Show "Limited Availability" section to create urgency
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="sr-only peer"
+                                                            checked={values.urgency_enabled || false}
+                                                            onChange={(e) => setFieldValue('urgency_enabled', e.target.checked)}
+                                                        />
+                                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-600/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div className="mt-3 text-xs text-muted-foreground">
+                                                {values.urgency_enabled 
+                                                    ? "✓ Urgency section will be visible to visitors" 
+                                                    : "Urgency section will be hidden from visitors"
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

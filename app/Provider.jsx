@@ -41,7 +41,7 @@ function Provider({ children }) {
         >
           <div>
             <Header />
-            <div className='mt-40'>
+            <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
               {children}
             </div>
           </div>
@@ -65,14 +65,14 @@ function Provider({ children }) {
               libraries={[]}
             >
               <Header />
-              <div className='mt-40'>
+              <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
                 {children}
               </div>
             </LoadScript>
           ) : (
             <>
               <Header />
-              <div className='mt-40'>
+              <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
                 {children}
               </div>
             </>

@@ -121,6 +121,9 @@ function AddNewListing() {
                 created_by: user?.email,
                 active: false, // Start as inactive until fully configured
                 featured: false,
+                show_map: false, // Default to hidden map
+                social_proof_enabled: false, // Default to hidden social proof
+                urgency_enabled: false, // Default to hidden urgency
                 slug: tempSlug // Add the required slug field
             };
 
