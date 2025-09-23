@@ -10,7 +10,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { SearchableSelect, SearchableSelectItem } from "@/components/ui/searchable-select"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
@@ -580,35 +579,36 @@ function EditListing({ params }) {
                                                 <Factory className="w-4 h-4" />
                                                 Industry Type *
                                             </label>
-                                            <SearchableSelect
+                                            <Select
                                                 onValueChange={(value) => setFieldValue('industry', value)}
                                                 value={values.industry}
-                                                placeholder="Select Industry Type"
-                                                searchPlaceholder="Search industries..."
-                                                emptyText="No industries found."
-                                                className="h-12"
                                             >
-                                                <SearchableSelectItem value="automobile">Automobile</SearchableSelectItem>
-                                                <SearchableSelectItem value="child-care">Child Care</SearchableSelectItem>
-                                                <SearchableSelectItem value="decoration">Decoration</SearchableSelectItem>
-                                                <SearchableSelectItem value="farming">Farming</SearchableSelectItem>
-                                                <SearchableSelectItem value="fitness">Fitness</SearchableSelectItem>
-                                                <SearchableSelectItem value="food">Food</SearchableSelectItem>
-                                                <SearchableSelectItem value="hair-services">Hair Services</SearchableSelectItem>
-                                                <SearchableSelectItem value="handicraft">Handicraft</SearchableSelectItem>
-                                                <SearchableSelectItem value="housekeeping">Housekeeping</SearchableSelectItem>
-                                                <SearchableSelectItem value="immigration">Immigration</SearchableSelectItem>
-                                                <SearchableSelectItem value="makeup-services">Makeup Services</SearchableSelectItem>
-                                                <SearchableSelectItem value="personal-care">Personal Care Services</SearchableSelectItem>
-                                                <SearchableSelectItem value="pet-services">Pet Services</SearchableSelectItem>
-                                                <SearchableSelectItem value="photography">Photography</SearchableSelectItem>
-                                                <SearchableSelectItem value="real-estate">Real Estate</SearchableSelectItem>
-                                                <SearchableSelectItem value="technology">Technology</SearchableSelectItem>
-                                                <SearchableSelectItem value="trades">Trades</SearchableSelectItem>
-                                                <SearchableSelectItem value="tutoring">Tutoring</SearchableSelectItem>
-                                                <SearchableSelectItem value="videography">Videography</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding">Wedding</SearchableSelectItem>
-                                            </SearchableSelect>
+                                                <SelectTrigger className="h-12">
+                                                    <SelectValue placeholder="Select Industry Type" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="automobile">Automobile</SelectItem>
+                                                    <SelectItem value="child-care">Child Care</SelectItem>
+                                                    <SelectItem value="decoration">Decoration</SelectItem>
+                                                    <SelectItem value="farming">Farming</SelectItem>
+                                                    <SelectItem value="fitness">Fitness</SelectItem>
+                                                    <SelectItem value="food">Food</SelectItem>
+                                                    <SelectItem value="hair-services">Hair Services</SelectItem>
+                                                    <SelectItem value="handicraft">Handicraft</SelectItem>
+                                                    <SelectItem value="housekeeping">Housekeeping</SelectItem>
+                                                    <SelectItem value="immigration">Immigration</SelectItem>
+                                                    <SelectItem value="makeup-services">Makeup Services</SelectItem>
+                                                    <SelectItem value="personal-care">Personal Care Services</SelectItem>
+                                                    <SelectItem value="pet-services">Pet Services</SelectItem>
+                                                    <SelectItem value="photography">Photography</SelectItem>
+                                                    <SelectItem value="real-estate">Real Estate</SelectItem>
+                                                    <SelectItem value="technology">Technology</SelectItem>
+                                                    <SelectItem value="trades">Trades</SelectItem>
+                                                    <SelectItem value="tutoring">Tutoring</SelectItem>
+                                                    <SelectItem value="videography">Videography</SelectItem>
+                                                    <SelectItem value="wedding">Wedding</SelectItem>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                         
                                         <div className="space-y-2">
@@ -616,48 +616,49 @@ function EditListing({ params }) {
                                                 <Filter className="w-4 h-4" />
                                                 Category *
                                             </label>
-                                            <SearchableSelect
+                                            <Select
                                                 onValueChange={(value) => setFieldValue('category', value)}
                                                 value={values.category}
-                                                placeholder="Select Category"
-                                                searchPlaceholder="Search categories..."
-                                                emptyText="No categories found."
-                                                className="h-12"
                                             >
-                                                <SearchableSelectItem value="auto-repair">Auto Repair</SearchableSelectItem>
-                                                <SearchableSelectItem value="bridal-wear">Bridal Wear</SearchableSelectItem>
-                                                <SearchableSelectItem value="catering">Catering</SearchableSelectItem>
-                                                <SearchableSelectItem value="custom-cakes">Custom Cakes</SearchableSelectItem>
-                                                <SearchableSelectItem value="custom-cookies">Custom Cookies</SearchableSelectItem>
-                                                <SearchableSelectItem value="custom-food">Custom Food / Delicacy</SearchableSelectItem>
-                                                <SearchableSelectItem value="dog-sitter">Dog Sitter</SearchableSelectItem>
-                                                <SearchableSelectItem value="electrician">Electrician</SearchableSelectItem>
-                                                <SearchableSelectItem value="eyebrows">Eyebrows</SearchableSelectItem>
-                                                <SearchableSelectItem value="facials">Facials</SearchableSelectItem>
-                                                <SearchableSelectItem value="family-photos">Family Photography</SearchableSelectItem>
-                                                <SearchableSelectItem value="decoration">Flowers & Decoration</SearchableSelectItem>
-                                                <SearchableSelectItem value="hair-dresser">Hair Dresser</SearchableSelectItem>
-                                                <SearchableSelectItem value="home-cook">Home Cook</SearchableSelectItem>
-                                                <SearchableSelectItem value="house-cleaner">House Cleaner</SearchableSelectItem>
-                                                <SearchableSelectItem value="lashes">Lashes</SearchableSelectItem>
-                                                <SearchableSelectItem value="lifestyle-photos">Lifestyle Photography</SearchableSelectItem>
-                                                <SearchableSelectItem value="mehndi">Mehndi</SearchableSelectItem>
-                                                <SearchableSelectItem value="misc">Misc</SearchableSelectItem>
-                                                <SearchableSelectItem value="music">Music</SearchableSelectItem>
-                                                <SearchableSelectItem value="nails">Nails</SearchableSelectItem>
-                                                <SearchableSelectItem value="nutrition">Nutrition</SearchableSelectItem>
-                                                <SearchableSelectItem value="other">Other</SearchableSelectItem>
-                                                <SearchableSelectItem value="personal-trainer">Personal Trainer</SearchableSelectItem>
-                                                <SearchableSelectItem value="pet-groomer">Pet Groomer</SearchableSelectItem>
-                                                <SearchableSelectItem value="plumber">Plumber</SearchableSelectItem>
-                                                <SearchableSelectItem value="restaurant">Restaurant</SearchableSelectItem>
-                                                <SearchableSelectItem value="web-development">Web Development</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding-sweets">Wedding Cakes & Sweets</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding-photos-videos">Wedding Photos / Videos</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding-planner">Wedding Planner</SearchableSelectItem>
-                                                <SearchableSelectItem value="wedding-wear">Wedding Wear</SearchableSelectItem>
-                                            </SearchableSelect>
+                                                <SelectTrigger className="h-12">
+                                                    <SelectValue placeholder="Select Category" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="auto-repair">Auto Repair</SelectItem>
+                                                    <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
+                                                    <SelectItem value="catering">Catering</SelectItem>
+                                                    <SelectItem value="custom-cakes">Custom Cakes</SelectItem>
+                                                    <SelectItem value="custom-cookies">Custom Cookies</SelectItem>
+                                                    <SelectItem value="custom-food">Custom Food / Delicacy</SelectItem>
+                                                    <SelectItem value="dog-sitter">Dog Sitter</SelectItem>
+                                                    <SelectItem value="electrician">Electrician</SelectItem>
+                                                    <SelectItem value="eyebrows">Eyebrows</SelectItem>
+                                                    <SelectItem value="facials">Facials</SelectItem>
+                                                    <SelectItem value="family-photos">Family Photography</SelectItem>
+                                                    <SelectItem value="decoration">Flowers & Decoration</SelectItem>
+                                                    <SelectItem value="hair-dresser">Hair Dresser</SelectItem>
+                                                    <SelectItem value="home-cook">Home Cook</SelectItem>
+                                                    <SelectItem value="house-cleaner">House Cleaner</SelectItem>
+                                                    <SelectItem value="lashes">Lashes</SelectItem>
+                                                    <SelectItem value="lifestyle-photos">Lifestyle Photography</SelectItem>
+                                                    <SelectItem value="mehndi">Mehndi</SelectItem>
+                                                    <SelectItem value="misc">Misc</SelectItem>
+                                                    <SelectItem value="music">Music</SelectItem>
+                                                    <SelectItem value="nails">Nails</SelectItem>
+                                                    <SelectItem value="nutrition">Nutrition</SelectItem>
+                                                    <SelectItem value="other">Other</SelectItem>
+                                                    <SelectItem value="personal-trainer">Personal Trainer</SelectItem>
+                                                    <SelectItem value="pet-groomer">Pet Groomer</SelectItem>
+                                                    <SelectItem value="plumber">Plumber</SelectItem>
+                                                    <SelectItem value="restaurant">Restaurant</SelectItem>
+                                                    <SelectItem value="web-development">Web Development</SelectItem>
+                                                    <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
+                                                    <SelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SelectItem>
+                                                    <SelectItem value="wedding-photos-videos">Wedding Photos / Videos</SelectItem>
+                                                    <SelectItem value="wedding-planner">Wedding Planner</SelectItem>
+                                                    <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                         
                                         <div className="space-y-2">

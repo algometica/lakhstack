@@ -7,8 +7,6 @@ import { toast } from 'sonner';
 import GoogleMapSection from './GoogleMapSection';
 
 function ListingMapView({ featured }) {
-  console.log('ListingMapView rendered with featured prop:', featured);
-
   const [listing, setListing] = useState([]);
   const [searchedAddress, setSearchedAddress] = useState([]);
   const [coordinates, setCoordinates] = useState();
@@ -26,8 +24,6 @@ function ListingMapView({ featured }) {
   }, [coordinates, searchedAddress, industryType, categoryType, featured])
 
   const getLatestListing = useCallback(async () => {
-    console.log('getLatestListing called with featured:', featured);
-    
     const { data, error } = await supabase
       .from('listing')
       .select('*, listing_images(url, listing_id)')
@@ -36,8 +32,6 @@ function ListingMapView({ featured }) {
       .order('id', { ascending: false })
 
     if (data) {
-      console.log('getLatestListing result:', data.length, 'listings');
-      console.log('Premium values in result:', data.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
       setListing(data);
     }
     if (error) {
@@ -47,11 +41,7 @@ function ListingMapView({ featured }) {
   }, [featured])
 
   const handleSearchClick = useCallback(async () => {
-    console.log('handleSearchClick called with featured:', featured);
-    console.log('Search filters:', { searchedAddress, coordinates, industryType, categoryType });
-    
     if (!searchedAddress && !coordinates && !industryType && !categoryType) {
-      console.log('No search filters, calling getLatestListing');
       getLatestListing();
       return;
     }
@@ -64,10 +54,7 @@ function ListingMapView({ featured }) {
 
     // Apply featured filter based on the prop - this is CRITICAL
     if (featured && featured.length > 0) {
-      console.log('Applying featured filter:', featured);
       query = query.in('featured', featured);
-    } else {
-      console.log('No featured filter applied - showing all listings');
     }
 
     // Apply industry and category filters at database level
@@ -127,13 +114,9 @@ function ListingMapView({ featured }) {
       
       // Additional safety check: ensure featured filtering is applied correctly
       if (featured && featured.length > 0) {
-        const beforeCount = filteredListings.length;
         filteredListings = filteredListings.filter(listing => featured.includes(listing.featured));
-        console.log(`Safety filter applied: ${beforeCount} -> ${filteredListings.length} listings`);
       }
       
-      console.log('Final filtered listings:', filteredListings.length, 'listings');
-      console.log('Premium values in filtered result:', filteredListings.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
       setListing(filteredListings);
     }
   }, [searchedAddress, coordinates, industryType, categoryType, featured])
@@ -162,6 +145,8 @@ function ListingMapView({ featured }) {
           setCoordinates={setCoordinates}
           setIndustryType={setIndustryType}
           setCategoryType={setCategoryType}
+          industryType={industryType}
+          categoryType={categoryType}
         />
       </div>
       {/* <div className='fixed right-10 h-full md:w-[390px] lg:w-[490px] xl:w-[650px]'>

@@ -9,7 +9,9 @@ import Link from 'next/link'
 
 function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
     setIndustryType,
-    setCategoryType
+    setCategoryType,
+    industryType,
+    categoryType
 }) {
 
     const [address, setAddress] = useState();
@@ -32,6 +34,8 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
                 <FilterSection
                     setIndustryType={setIndustryType}
                     setCategoryType={setCategoryType}
+                    industryType={industryType}
+                    categoryType={categoryType}
                 />
             </div>
 
