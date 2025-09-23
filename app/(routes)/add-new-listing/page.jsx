@@ -120,7 +120,8 @@ function AddNewListing() {
                 country: country,
                 created_by: user?.email,
                 active: false, // Start as inactive until fully configured
-                featured: false,
+                featured: false, // Default to basic (not premium)
+                listing_type: 'basic', // Default to basic listing
                 show_map: false, // Default to hidden map
                 social_proof_enabled: false, // Default to hidden social proof
                 urgency_enabled: false, // Default to hidden urgency

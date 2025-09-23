@@ -12,6 +12,8 @@ import ModernImageGallery from '../_components/ModernImageGallery'
 import ModernSidebar from '../_components/ModernSidebar'
 import GoogleMapSection from '@/app/_components/GoogleMapSection'
 import BusinessDetail from '../_components/BusinessDetail'
+import BasicListingView from '../_components/BasicListingView'
+import { PremiumBadge } from '@/components/ui/premium-badge'
 // Removed global feature flags - now using listing-specific flags
 
 function ViewListingBySlug() {
@@ -203,6 +205,9 @@ function ViewListingBySlug() {
                                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                                         <span className="text-sm font-medium text-green-600 dark:text-green-400">Verified Business</span>
                                     </div>
+                                    {listing.featured && (
+                                        <PremiumBadge size="sm" variant="glow" />
+                                    )}
                                 </div>
                                 {listing.business_desc && (
                                     <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-3xl">
@@ -215,12 +220,16 @@ function ViewListingBySlug() {
                 </div>
             </div>
 
-            {/* Main Content - Flexible Layout */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Top Section - Image Gallery */}
-                <div className="mb-8">
-                    <ModernImageGallery imageList={listing.listing_images} />
-                </div>
+            {/* Conditional Rendering: Basic vs Premium */}
+            {(listing.listing_type === 'basic' || (!listing.listing_type && !listing.featured)) ? (
+                <BasicListingView listing={listing} />
+            ) : (
+                /* Premium Listing - Full Featured View */
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    {/* Top Section - Image Gallery */}
+                    <div className="mb-8">
+                        <ModernImageGallery imageList={listing.listing_images} />
+                    </div>
 
                 {/* Mobile-First Content Flow - Optimized for Engagement */}
                 <div className="space-y-6 lg:hidden">
@@ -586,19 +595,20 @@ function ViewListingBySlug() {
                     </div>
                 </div>
 
-                {/* Additional Content */}
-                <div className="mt-16">
-                    <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">More Listings</h2>
-                        <p className="text-slate-600 dark:text-slate-400">Discover more businesses in your area</p>
-                        <Link href="/all-listings">
-                            <Button className="mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-                                Explore All Listings
-                            </Button>
-                        </Link>
+                    {/* Additional Content */}
+                    <div className="mt-16">
+                        <div className="text-center py-12">
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">More Listings</h2>
+                            <p className="text-slate-600 dark:text-slate-400">Discover more businesses in your area</p>
+                            <Link href="/all-listings">
+                                <Button className="mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                    Explore All Listings
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }

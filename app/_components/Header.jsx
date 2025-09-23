@@ -52,7 +52,7 @@ function Header() {
                 ? 'text-primary bg-primary/10 border border-primary/20' 
                 : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
               }`}>
-              Featured
+              Premium
             </div>
           </Link>
           <Link href={'/all-listings'}>
@@ -144,7 +144,7 @@ function Header() {
                   ? 'text-primary bg-primary/10 border border-primary/20' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                 }`}>
-                Featured
+                Premium
               </div>
             </Link>
             <Link href={'/all-listings'} onClick={() => setIsMobileMenuOpen(false)}>

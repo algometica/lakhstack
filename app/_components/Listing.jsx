@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import GoogleAddressSearch from './GoogleAddressSearch'
 import { Button } from '@/components/ui/button'
 import FilterSection from './FilterSection'
+import { PremiumIcon } from '@/components/ui/premium-badge'
 import Link from 'next/link'
 
 function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
@@ -64,7 +65,12 @@ function Listing({ listing, handleSearchClick, searchedAddress, setCoordinates,
                             </div>
                             
                             <div className='p-4'>
-                                <h2 className='font-bold text-lg mb-2 text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2'>{item?.business_name}</h2>
+                                <div className='flex items-start justify-between mb-2'>
+                                    <h2 className='font-bold text-lg text-foreground group-hover:text-primary transition-colors duration-200 line-clamp-2 flex-1'>{item?.business_name}</h2>
+                                    {item.featured && (
+                                        <PremiumIcon size="sm" className="ml-2 flex-shrink-0" />
+                                    )}
+                                </div>
                                 
                                 <div className='flex items-center gap-1 mb-3 text-muted-foreground'>
                                     <MapPin className='h-4 w-4 flex-shrink-0' />

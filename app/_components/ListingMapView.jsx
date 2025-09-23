@@ -37,7 +37,7 @@ function ListingMapView({ featured }) {
 
     if (data) {
       console.log('getLatestListing result:', data.length, 'listings');
-      console.log('Featured values in result:', data.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
+      console.log('Premium values in result:', data.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
       setListing(data);
     }
     if (error) {
@@ -133,7 +133,7 @@ function ListingMapView({ featured }) {
       }
       
       console.log('Final filtered listings:', filteredListings.length, 'listings');
-      console.log('Featured values in filtered result:', filteredListings.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
+      console.log('Premium values in filtered result:', filteredListings.map(l => ({ id: l.id, business_name: l.business_name, featured: l.featured })));
       setListing(filteredListings);
     }
   }, [searchedAddress, coordinates, industryType, categoryType, featured])

@@ -38,8 +38,10 @@ import {
 import Link from 'next/link';
 
 const INDUSTRIES = [
-  'farming', 'fitness', 'food', 'handicraft', 'housekeeping', 'immigration',
-  'personal-care', 'pets', 'photography', 'technology', 'trades', 'wedding'
+  'automobile', 'child-care', 'decoration', 'farming', 'fitness', 'food', 
+  'hair-services', 'handicraft', 'housekeeping', 'immigration', 'makeup-services',
+  'personal-care', 'pet-services', 'photography', 'real-estate', 'technology', 
+  'trades', 'tutoring', 'videography', 'wedding'
 ];
 
 const PRICE_RANGES = ['$100 and under', '$100-$250', '$250-$500', '$500+'];
@@ -65,7 +67,7 @@ export default function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [industryFilter, setIndustryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [featuredFilter, setFeaturedFilter] = useState('');
+  const [featuredFilter, setPremiumFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -128,7 +130,7 @@ export default function AdminPanel() {
       );
     }
 
-    // Featured filter
+    // Premium filter
     if (featuredFilter) {
       filtered = filtered.filter(listing => 
         featuredFilter === 'featured' ? listing.featured : !listing.featured
@@ -147,7 +149,7 @@ export default function AdminPanel() {
     setSearchTerm('');
     setIndustryFilter('');
     setStatusFilter('');
-    setFeaturedFilter('');
+    setPremiumFilter('');
     setPriceFilter('');
   };
 
@@ -186,17 +188,36 @@ export default function AdminPanel() {
     }
   };
 
-  const toggleFeaturedStatus = async (id, currentFeatured) => {
+  const togglePremiumStatus = async (id, currentPremium) => {
     try {
-      await supabase
+      console.log('Toggling premium status for listing:', id, 'Current premium:', currentPremium);
+      
+      const newListingType = currentPremium ? 'basic' : 'premium';
+      const newFeaturedStatus = !currentPremium;
+      
+      console.log('New values - featured:', newFeaturedStatus, 'listing_type:', newListingType);
+      
+      const { data, error } = await supabase
         .from('listing')
-        .update({ featured: !currentFeatured })
-        .eq('id', id);
+        .update({ 
+          featured: newFeaturedStatus,
+          listing_type: newListingType 
+        })
+        .eq('id', id)
+        .select();
 
-      toast.success(`Listing ${!currentFeatured ? 'marked as featured' : 'removed from featured'}`);
+      if (error) {
+        console.error('Database error:', error);
+        toast.error('Failed to update premium status: ' + error.message);
+        return;
+      }
+
+      console.log('Update successful:', data);
+      toast.success(`Premium ${!currentPremium ? 'enabled' : 'disabled'} for listing`);
       loadData();
     } catch (error) {
-      toast.error('Failed to update featured status');
+      console.error('Toggle premium error:', error);
+      toast.error('Failed to update premium status');
     }
   };
 
@@ -297,7 +318,7 @@ export default function AdminPanel() {
             <div className="flex items-center">
               <Star className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
               <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Featured</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Premium</p>
                 <p className="text-xl sm:text-2xl font-bold text-foreground">
                   {listings.filter(l => l.featured).length}
                 </p>
@@ -437,7 +458,7 @@ export default function AdminPanel() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
-                          Featured
+                          Premium Status
                         </label>
                         <select
                           value={featuredFilter}
@@ -445,8 +466,8 @@ export default function AdminPanel() {
                           className="w-full rounded-md border-border shadow-sm focus:border-primary focus:ring-primary"
                         >
                           <option value="">All Listings</option>
-                          <option value="featured">Featured</option>
-                          <option value="regular">Regular</option>
+                          <option value="featured">Premium</option>
+                          <option value="regular">Basic</option>
                         </select>
                       </div>
                       <div>
@@ -498,7 +519,7 @@ export default function AdminPanel() {
                           </span>
                           {listing.featured && (
                             <span className="block px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                              Featured
+                              Premium
                             </span>
                           )}
                         </div>
@@ -564,11 +585,11 @@ export default function AdminPanel() {
                           <Button
                             size="sm"
                             variant={listing.featured ? "default" : "outline"}
-                            onClick={() => toggleFeaturedStatus(listing.id, listing.featured)}
-                            className={listing.featured ? "bg-yellow-500 hover:bg-yellow-600" : ""}
+                            onClick={() => togglePremiumStatus(listing.id, listing.featured)}
+                            className={listing.featured ? "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white" : "border-pink-500 text-pink-500 hover:bg-pink-50 dark:hover:bg-pink-900/20"}
                           >
                             <Star className="w-4 h-4 mr-1" />
-                            {listing.featured ? 'Unfeature' : 'Feature'}
+                            Premium
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
