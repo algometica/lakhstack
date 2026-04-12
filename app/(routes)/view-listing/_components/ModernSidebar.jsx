@@ -11,7 +11,7 @@ import {
     Check, 
     Phone, 
     Globe, 
-    Instagram,
+    Link2,
     Star,
     Clock,
     Users,
@@ -157,7 +157,7 @@ function ModernSidebar({ listingDetail }) {
                         
                         {listingDetail?.instagram_url && (
                             <div className="flex items-center gap-2 p-3 bg-secondary/60 rounded-2xl">
-                                <Instagram className="w-4 h-4 text-muted-foreground" />
+                                <Link2 className="w-4 h-4 text-muted-foreground" />
                                 <a 
                                     href={listingDetail.instagram_url}
                                     target="_blank"

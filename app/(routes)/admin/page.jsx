@@ -32,7 +32,7 @@ import {
   Calendar,
   Phone,
   Globe,
-  Instagram,
+  Link2,
   DollarSign,
   Briefcase
 } from 'lucide-react';

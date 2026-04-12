@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { extractIdFromSlug } from '@/lib/slug-utils'
-import { Loader, ArrowLeft, MapPin, Phone, Globe, Instagram, Mail, Calendar, DollarSign, Factory, Filter, BadgeDollarSign, ExternalLink, Award, Clock } from 'lucide-react'
+import { Loader, ArrowLeft, MapPin, Phone, Globe, Link2, Mail, Calendar, DollarSign, Factory, Filter, BadgeDollarSign, ExternalLink, Award, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import ModernImageGallery from '../_components/ModernImageGallery'
@@ -40,25 +40,6 @@ function ViewListingBySlug() {
   }
   return parts;
  };
-
- useEffect(() => {
-  if (params.slug) {
-   getListingBySlug(params.slug)
-  }
- }, [params.slug, getListingBySlug])
-
- // Add timeout to prevent infinite loading
- useEffect(() => {
-  const timeout = setTimeout(() => {
-   if (loading) {
-    console.log('⏰ Loading timeout reached')
-    setError('Loading timeout - please try again')
-    setLoading(false)
-   }
-  }, 10000) // 10 second timeout
-
-  return () => clearTimeout(timeout)
- }, [loading])
 
  const getListingBySlug = useCallback(async (slug) => {
   const supabase = getSupabaseClient();
@@ -162,6 +143,25 @@ function ViewListingBySlug() {
    setLoading(false)
   }
  }, [redirectCount, router])
+
+ useEffect(() => {
+  if (params.slug) {
+   getListingBySlug(params.slug)
+  }
+ }, [params.slug, getListingBySlug])
+
+ // Add timeout to prevent infinite loading
+ useEffect(() => {
+  const timeout = setTimeout(() => {
+   if (loading) {
+    console.log('⏰ Loading timeout reached')
+    setError('Loading timeout - please try again')
+    setLoading(false)
+   }
+  }, 10000) // 10 second timeout
+
+  return () => clearTimeout(timeout)
+ }, [loading])
 
  const descriptionParagraphs = formatDescription(listing?.description);
 
@@ -389,7 +389,7 @@ function ViewListingBySlug() {
         <div className="bg-secondary/60 rounded-2xl p-4 border border-border/60">
          <div className="flex items-center gap-3 mb-2">
           <div className="p-2 bg-white rounded-xl border border-border/70">
-           <Instagram className="w-5 h-5 text-muted-foreground" />
+           <Link2 className="w-5 h-5 text-muted-foreground" />
           </div>
           <div>
            <p className="text-xs font-medium text-muted-foreground">Instagram</p>
@@ -540,7 +540,7 @@ function ViewListingBySlug() {
           <div className="bg-secondary/60 rounded-2xl p-4 border border-border/60">
            <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-white rounded-xl border border-border/70">
-             <Instagram className="w-5 h-5 text-muted-foreground" />
+             <Link2 className="w-5 h-5 text-muted-foreground" />
             </div>
             <div>
              <p className="text-xs font-medium text-muted-foreground">Instagram</p>

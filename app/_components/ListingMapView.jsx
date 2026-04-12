@@ -12,15 +12,19 @@ function ListingMapView({ featured }) {
   const [coordinates, setCoordinates] = useState();
   const [categoryType, setCategoryType] = useState();
 
-
-
-  useEffect(() => {
-    getLatestListing();
-  }, [getLatestListing])
-
-  useEffect(() => {
-    handleSearchClick();
-  }, [handleSearchClick])
+  // Haversine formula to calculate distance between two points
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const distance = R * c; // Distance in kilometers
+    return distance;
+  }
 
   const getLatestListing = useCallback(async () => {
     const supabase = getSupabaseClient();
@@ -72,7 +76,7 @@ function ListingMapView({ featured }) {
 
     if (data) {
       let filteredListings = data;
-      
+
       // Apply category filter using canonical mapping
       if (categoryType) {
         filteredListings = filteredListings.filter((listingItem) => listingItem.category === categoryType);
@@ -85,63 +89,56 @@ function ListingMapView({ featured }) {
           if (!listing.coordinates || !listing.coordinates.lat || !listing.coordinates.lng) {
             return false;
           }
-          
+
           // Calculate distance using Haversine formula
           const distance = calculateDistance(
             coordinates.lat, coordinates.lng,
             listing.coordinates.lat, listing.coordinates.lng
           );
-          
+
           // Include listings within 50km radius
           return distance <= 50;
         });
-        
+
       } else if (searchedAddress) {
         // Text-based filtering as fallback
-        const searchTerm = searchedAddress?.value?.structured_formatting?.main_text || 
+        const searchTerm = searchedAddress?.value?.structured_formatting?.main_text ||
                           searchedAddress?.label;
-        
+
         if (searchTerm) {
           filteredListings = data.filter(listing => {
             const matchesAddress = listing.address && listing.address.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesName = listing.business_name && listing.business_name.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesDesc = listing.business_desc && listing.business_desc.toLowerCase().includes(searchTerm.toLowerCase());
-            
+
             return matchesAddress || matchesName || matchesDesc;
           });
         }
       }
-      
+
       // Additional safety check: ensure featured filtering is applied correctly
       if (featured && featured.length > 0) {
         filteredListings = filteredListings.filter(listing => featured.includes(listing.featured));
       }
-      
+
       setListing(filteredListings);
     }
-  }, [searchedAddress, coordinates, categoryType, featured, getLatestListing])
+  }, [searchedAddress, coordinates, categoryType, featured, getLatestListing, calculateDistance])
 
+  useEffect(() => {
+    getLatestListing();
+  }, [getLatestListing])
 
-  // Haversine formula to calculate distance between two points
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in kilometers
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const distance = R * c; // Distance in kilometers
-    return distance;
-  }
+  useEffect(() => {
+    handleSearchClick();
+  }, [handleSearchClick])
 
   return (
     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
       <div className='bg-transparent min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6'>
         <Listing
           listing={listing}
-          searchedAddress={(value) => setSearchedAddress(value)} 
+          searchedAddress={(value) => setSearchedAddress(value)}
           setCoordinates={setCoordinates}
           setCategoryType={setCategoryType}
           categoryType={categoryType}
