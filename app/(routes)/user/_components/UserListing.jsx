@@ -7,7 +7,7 @@ import { Bath, BedDouble, Factory, Filter, MapPin, Ruler, Trash } from 'lucide-r
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { getListingCategoryLabel } from '@/lib/category-taxonomy';
 import {
     AlertDialog,
@@ -28,11 +28,7 @@ function UserListing() {
     const user = session?.user;
     const [listing, setListing] = useState();
 
-    useEffect(() => {
-        user && GetUserListing();
-    }, [user])
-
-    const GetUserListing = async () => {
+    const GetUserListing = useCallback(async () => {
         const supabase = getSupabaseClient();
         if (!supabase) return;
         const { data, error } = await supabase
@@ -41,8 +37,11 @@ function UserListing() {
             .eq('created_by', user?.email);
         
         setListing(data);
-        console.log(data);
-    }
+    }, [user?.email]);
+
+    useEffect(() => {
+        user && GetUserListing();
+    }, [user, GetUserListing])
 
     /**
      * Delete Property 

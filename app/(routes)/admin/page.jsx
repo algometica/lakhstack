@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { getSupabaseClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import Image from 'next/image';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,37 +73,7 @@ export default function AdminPanel() {
     }
   }, [isAdmin]);
 
-  useEffect(() => {
-    filterListings();
-  }, [listings, searchTerm, industryFilter, statusFilter, featuredFilter, priceFilter]);
-
-  const loadData = async () => {
-    const supabase = getSupabaseClient();
-    if (!supabase) return;
-    setLoading(true);
-    try {
-      // Load listings with images
-      const { data: listingsData } = await supabase
-        .from('listing')
-        .select('*, listing_images(url, listing_id)')
-        .order('created_at', { ascending: false });
-
-      // Load users
-      const { data: usersData } = await supabase
-        .from('users')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      setListings(listingsData || []);
-      setUsers(usersData || []);
-    } catch (error) {
-      toast.error('Failed to load data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterListings = () => {
+  const filterListings = useCallback(() => {
     let filtered = listings;
 
     // Search filter
@@ -140,7 +111,39 @@ export default function AdminPanel() {
     }
 
     setFilteredListings(filtered);
+  }, [featuredFilter, industryFilter, listings, priceFilter, searchTerm, statusFilter]);
+
+  useEffect(() => {
+    filterListings();
+  }, [filterListings]);
+
+  const loadData = async () => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+    setLoading(true);
+    try {
+      // Load listings with images
+      const { data: listingsData } = await supabase
+        .from('listing')
+        .select('*, listing_images(url, listing_id)')
+        .order('created_at', { ascending: false });
+
+      // Load users
+      const { data: usersData } = await supabase
+        .from('users')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      setListings(listingsData || []);
+      setUsers(usersData || []);
+    } catch (error) {
+      toast.error('Failed to load data');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -485,10 +488,12 @@ export default function AdminPanel() {
                       {/* Image */}
                       <div className="h-48 bg-muted relative">
                         {listing.listing_images && listing.listing_images.length > 0 ? (
-                          <img
+                          <Image
                             src={listing.listing_images[0].url}
-                            alt={listing.business_name}
-                            className="w-full h-full object-cover"
+                            alt={listing.business_name || 'Listing image'}
+                            fill
+                            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                            className="object-cover"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-muted-foreground">
@@ -657,10 +662,12 @@ export default function AdminPanel() {
                             <div className="flex items-center">
                               <div className="h-8 w-8 sm:h-10 sm:w-10 bg-muted rounded-full flex items-center justify-center">
                                 {userItem.image ? (
-                                  <img
+                                  <Image
                                     src={userItem.image}
-                                    alt={userItem.name}
-                                    className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
+                                    alt={userItem.name || 'User'}
+                                    width={40}
+                                    height={40}
+                                    className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover"
                                   />
                                 ) : (
                                   <span className="text-muted-foreground font-medium text-xs sm:text-sm">

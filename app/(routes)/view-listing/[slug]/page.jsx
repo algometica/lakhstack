@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
@@ -45,7 +45,7 @@ function ViewListingBySlug() {
   if (params.slug) {
    getListingBySlug(params.slug)
   }
- }, [params.slug])
+ }, [params.slug, getListingBySlug])
 
  // Add timeout to prevent infinite loading
  useEffect(() => {
@@ -60,7 +60,7 @@ function ViewListingBySlug() {
   return () => clearTimeout(timeout)
  }, [loading])
 
- const getListingBySlug = async (slug) => {
+ const getListingBySlug = useCallback(async (slug) => {
   const supabase = getSupabaseClient();
   if (!supabase) return;
   try {
@@ -161,7 +161,7 @@ function ViewListingBySlug() {
    console.log('🏁 Loading complete')
    setLoading(false)
   }
- }
+ }, [redirectCount, router])
 
  const descriptionParagraphs = formatDescription(listing?.description);
 

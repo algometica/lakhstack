@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPin, X } from 'lucide-react';
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
@@ -18,7 +18,7 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
         if (clearTrigger > 0) {
             clearSelection();
         }
-    }, [clearTrigger]);
+    }, [clearTrigger, clearSelection]);
 
     // Use Google Places API (New) REST endpoints directly
     const searchPlaces = async (input) => {
@@ -148,14 +148,14 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
         }
     };
 
-    const clearSelection = () => {
+    const clearSelection = useCallback(() => {
         setInputValue('');
         setSelectedPlace(null);
         setShowPredictions(false);
         setPredictions([]);
         selectedAddress(null);
         setCoordinates(null);
-    };
+    }, [selectedAddress, setCoordinates]);
 
     return (
         <div className='flex items-center w-full relative'>

@@ -16,11 +16,11 @@ function ListingMapView({ featured }) {
 
   useEffect(() => {
     getLatestListing();
-  }, [featured])
+  }, [getLatestListing])
 
   useEffect(() => {
     handleSearchClick();
-  }, [coordinates, searchedAddress, categoryType, featured])
+  }, [handleSearchClick])
 
   const getLatestListing = useCallback(async () => {
     const supabase = getSupabaseClient();
@@ -119,7 +119,7 @@ function ListingMapView({ featured }) {
       
       setListing(filteredListings);
     }
-  }, [searchedAddress, coordinates, categoryType, featured])
+  }, [searchedAddress, coordinates, categoryType, featured, getLatestListing])
 
 
   // Haversine formula to calculate distance between two points
