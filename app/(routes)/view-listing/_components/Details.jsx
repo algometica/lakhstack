@@ -1,7 +1,7 @@
 
 import GoogleMapSection from '@/app/_components/GoogleMapSection'
 import { Button } from '@/components/ui/button'
-import { BadgeDollarSign, ExternalLink, Factory, Filter, Instagram, MapPin, Phone } from 'lucide-react'
+import { BadgeDollarSign, ExternalLink, Factory, Filter, Link2, MapPin, Phone } from 'lucide-react'
 import { getListingCategoryLabel } from '@/lib/category-taxonomy'
 
 import React from 'react'
@@ -110,7 +110,7 @@ function Details({ listingDetail }) {
                         <div className='group bg-gradient-to-br from-pink-500/5 to-pink-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-pink-500/20 hover:border-pink-500/40 transition-all duration-300 hover:shadow-lg'>
                             <div className='flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3'>
                                 <div className='p-2 sm:p-3 bg-pink-500/10 rounded-lg sm:rounded-xl group-hover:bg-pink-500/20 transition-colors'>
-                                    <Instagram className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500" />
+                                    <Link2 className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500" />
                                 </div>
                                 <div>
                                     <p className='text-xs sm:text-sm font-medium text-muted-foreground'>Instagram</p>

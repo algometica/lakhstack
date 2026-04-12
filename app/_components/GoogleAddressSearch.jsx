@@ -13,13 +13,6 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
     const [selectedPlace, setSelectedPlace] = useState(null);
     const debounceRef = useRef(null);
 
-    // Clear search when parent triggers it
-    useEffect(() => {
-        if (clearTrigger > 0) {
-            clearSelection();
-        }
-    }, [clearTrigger, clearSelection]);
-
     // Use Google Places API (New) REST endpoints directly
     const searchPlaces = async (input) => {
         if (!input.trim()) {
@@ -156,6 +149,13 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
         selectedAddress(null);
         setCoordinates(null);
     }, [selectedAddress, setCoordinates]);
+
+    // Clear search when parent triggers it
+    useEffect(() => {
+        if (clearTrigger > 0) {
+            clearSelection();
+        }
+    }, [clearTrigger, clearSelection]);
 
     return (
         <div className='flex items-center w-full relative'>

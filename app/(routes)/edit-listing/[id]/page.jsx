@@ -28,7 +28,7 @@ import {
     MapPin, 
     Phone, 
     Globe, 
-    Instagram, 
+    Link2, 
     DollarSign, 
     Calendar, 
     FileText, 
@@ -908,7 +908,7 @@ function EditListing({ params }) {
                                         
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                                                <Instagram className="w-4 h-4" />
+                                                <Link2 className="w-4 h-4" />
                                                 Instagram URL
                                             </label>
                                             <Input 
