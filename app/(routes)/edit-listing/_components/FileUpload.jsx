@@ -1,8 +1,10 @@
+"use client";
+
 import Image from 'next/image';
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { X, Trash2, Loader } from 'lucide-react'
-import { supabase } from '@/utils/supabase/client'
+import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
 function FileUpload({ setImages, imageList, onImageDeleted }) {
@@ -20,6 +22,8 @@ function FileUpload({ setImages, imageList, onImageDeleted }) {
     }
 
     const handleDeleteImage = async (imageId, imageUrl) => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         setDeletingImageId(imageId);
         
         try {

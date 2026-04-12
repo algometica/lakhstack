@@ -20,6 +20,7 @@ import {
 import { toast } from 'sonner'
 import Image from 'next/image'
 import { getListingUrl } from '@/lib/url-utils'
+import { getListingCategoryLabel } from '@/lib/category-taxonomy'
 
 function ModernSidebar({ listingDetail }) {
     const [copied, setCopied] = useState(false);
@@ -44,102 +45,96 @@ function ModernSidebar({ listingDetail }) {
 
     return (
         <div className="space-y-6">
-            {/* Contact Card - Primary Action */}
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl p-6 border border-blue-200 dark:border-slate-600 shadow-lg">
+            <div className="bg-white rounded-3xl p-6 border border-border/70 shadow-[0_18px_40px_rgba(15,23,42,0.10)]">
                 <div className="text-center mb-6">
-                    <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl mb-4">
+                    <div className="w-16 h-16 mx-auto rounded-2xl bg-secondary/70 flex items-center justify-center text-foreground font-bold text-xl mb-4">
                         {listingDetail.business_name?.charAt(0) || 'B'}
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-xl font-bold text-foreground mb-1">
                         {listingDetail.full_name || 'Business Owner'}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">
+                    <p className="text-muted-foreground text-sm mb-3">
                         {contactEmail}
                     </p>
                     {listingDetail?.business_email && (
-                        <span className="inline-block px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded-full">
+                        <span className="inline-block px-3 py-1 bg-secondary/70 text-foreground text-xs font-medium rounded-full">
                             Business Contact
                         </span>
                     )}
                 </div>
-                
+
                 <Button 
                     onClick={() => window.location.href = 'mailto:' + contactEmail}
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full bg-foreground text-background hover:bg-foreground/90 font-semibold py-3 rounded-2xl shadow-[0_10px_24px_rgba(15,23,42,0.18)]"
                 >
                     <MailOpen className="w-5 h-5 mr-2" />
                     Contact Business
                 </Button>
             </div>
 
-            {/* Business Details - Compact */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-lg">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Business Details</h3>
+            <div className="bg-white rounded-3xl p-5 border border-border/70 shadow-[0_14px_32px_rgba(15,23,42,0.08)]">
+                <h3 className="text-base font-bold text-foreground mb-3">Business Details</h3>
                 <div className="space-y-3">
-                    {/* Industry & Category Row */}
                     <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-2">
+                        <div className="bg-secondary/60 rounded-2xl p-3">
                             <div className="flex items-center gap-1 mb-1">
-                                <Factory className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-                                <span className="text-xs text-slate-600 dark:text-slate-400">Industry</span>
+                                <Factory className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Industry</span>
                             </div>
-                            <p className="font-medium text-slate-900 dark:text-white text-xs">{listingDetail?.industry || 'Not specified'}</p>
+                            <p className="font-medium text-foreground text-xs">{listingDetail?.industry || 'Not specified'}</p>
                         </div>
-                        <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-2">
+                        <div className="bg-secondary/60 rounded-2xl p-3">
                             <div className="flex items-center gap-1 mb-1">
-                                <Filter className="w-3 h-3 text-purple-600 dark:text-purple-400" />
-                                <span className="text-xs text-slate-600 dark:text-slate-400">Category</span>
+                                <Filter className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Category</span>
                             </div>
-                            <p className="font-medium text-slate-900 dark:text-white text-xs">{listingDetail?.category || 'Not specified'}</p>
+                            <p className="font-medium text-foreground text-xs">{getListingCategoryLabel(listingDetail)}</p>
                         </div>
                     </div>
-                    
-                    {/* Price Range & Years in Business Row */}
+
                     {(listingDetail?.price_range || listingDetail?.since) && (
                         <div className="grid grid-cols-2 gap-2">
                             {listingDetail?.price_range && (
-                                <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-2">
+                                <div className="bg-secondary/60 rounded-2xl p-3">
                                     <div className="flex items-center gap-1 mb-1">
-                                        <Star className="w-3 h-3 text-yellow-600 dark:text-yellow-400" />
-                                        <span className="text-xs text-slate-600 dark:text-slate-400">Price</span>
+                                        <Star className="w-3 h-3 text-muted-foreground" />
+                                        <span className="text-xs text-muted-foreground">Price</span>
                                     </div>
-                                    <p className="font-medium text-slate-900 dark:text-white text-xs">{listingDetail.price_range}</p>
+                                    <p className="font-medium text-foreground text-xs">{listingDetail.price_range}</p>
                                 </div>
                             )}
                             {listingDetail?.since && (
-                                <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-2">
+                                <div className="bg-secondary/60 rounded-2xl p-3">
                                     <div className="flex items-center gap-1 mb-1">
-                                        <Clock className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
-                                        <span className="text-xs text-slate-600 dark:text-slate-400">Since</span>
+                                        <Clock className="w-3 h-3 text-muted-foreground" />
+                                        <span className="text-xs text-muted-foreground">Since</span>
                                     </div>
-                                    <p className="font-medium text-slate-900 dark:text-white text-xs">{listingDetail.since}</p>
+                                    <p className="font-medium text-foreground text-xs">{listingDetail.since}</p>
                                 </div>
                             )}
                         </div>
                     )}
-                    
-                    {/* Location */}
-                    <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-2">
+
+                    <div className="bg-secondary/60 rounded-2xl p-3">
                         <div className="flex items-center gap-1 mb-1">
-                            <MapPin className="w-3 h-3 text-green-600 dark:text-green-400" />
-                            <span className="text-xs text-slate-600 dark:text-slate-400">Location</span>
+                            <MapPin className="w-3 h-3 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">Location</span>
                         </div>
-                        <p className="font-medium text-slate-900 dark:text-white text-xs">{listingDetail?.city}, {listingDetail?.country}</p>
+                        <p className="font-medium text-foreground text-xs">{listingDetail?.city}, {listingDetail?.country}</p>
                     </div>
                 </div>
             </div>
 
-            {/* Contact Information - Compact */}
             {(listingDetail?.phone || listingDetail?.url || listingDetail?.instagram_url) && (
-                <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-lg">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Contact</h3>
+                <div className="bg-white rounded-3xl p-5 border border-border/70 shadow-[0_14px_32px_rgba(15,23,42,0.08)]">
+                    <h3 className="text-base font-bold text-foreground mb-3">Contact</h3>
                     <div className="space-y-2">
                         {listingDetail?.phone && (
-                            <div className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                                <Phone className="w-4 h-4 text-green-600 dark:text-green-400" />
+                            <div className="flex items-center gap-2 p-3 bg-secondary/60 rounded-2xl">
+                                <Phone className="w-4 h-4 text-muted-foreground" />
                                 <a 
                                     href={`tel:${listingDetail.phone}`}
-                                    className="font-medium text-slate-900 dark:text-white text-sm hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                                    className="font-medium text-foreground text-sm hover:text-accent transition-colors"
                                 >
                                     {listingDetail.phone}
                                 </a>
@@ -147,13 +142,13 @@ function ModernSidebar({ listingDetail }) {
                         )}
                         
                         {listingDetail?.url && (
-                            <div className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                                <Globe className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            <div className="flex items-center gap-2 p-3 bg-secondary/60 rounded-2xl">
+                                <Globe className="w-4 h-4 text-muted-foreground" />
                                 <a 
                                     href={listingDetail.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-medium text-slate-900 dark:text-white text-sm hover:text-blue-600 dark:hover:text-blue-400 transition-colors truncate"
+                                    className="font-medium text-foreground text-sm hover:text-accent transition-colors truncate"
                                 >
                                     {listingDetail.url.replace(/^https?:\/\//, '')}
                                 </a>
@@ -161,13 +156,13 @@ function ModernSidebar({ listingDetail }) {
                         )}
                         
                         {listingDetail?.instagram_url && (
-                            <div className="flex items-center gap-2 p-2 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                                <Instagram className="w-4 h-4 text-pink-600 dark:text-pink-400" />
+                            <div className="flex items-center gap-2 p-3 bg-secondary/60 rounded-2xl">
+                                <Instagram className="w-4 h-4 text-muted-foreground" />
                                 <a 
                                     href={listingDetail.instagram_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-medium text-slate-900 dark:text-white text-sm hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                                    className="font-medium text-foreground text-sm hover:text-accent transition-colors"
                                 >
                                     @{listingDetail.instagram_url.split('/').filter(part => part && part !== 'instagram.com').pop() || 'instagram'}
                                 </a>
@@ -177,43 +172,41 @@ function ModernSidebar({ listingDetail }) {
                 </div>
             )}
 
-            {/* Status & Trust Indicators - Compact */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-lg">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Status</h3>
+            <div className="bg-white rounded-3xl p-5 border border-border/70 shadow-[0_14px_32px_rgba(15,23,42,0.08)]">
+                <h3 className="text-base font-bold text-foreground mb-3">Status</h3>
                 <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                            <Award className="w-3 h-3 text-green-600 dark:text-green-400" />
+                        <div className="w-6 h-6 rounded-md bg-secondary/70 flex items-center justify-center">
+                            <Award className="w-3 h-3 text-foreground" />
                         </div>
                         <div>
-                            <p className="font-medium text-slate-900 dark:text-white text-xs">Verified Business</p>
+                            <p className="font-medium text-foreground text-xs">Verified Business</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                            <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                        <div className="w-6 h-6 rounded-md bg-secondary/70 flex items-center justify-center">
+                            <Clock className="w-3 h-3 text-foreground" />
                         </div>
                         <div>
-                            <p className="font-medium text-slate-900 dark:text-white text-xs">Active Listing</p>
+                            <p className="font-medium text-foreground text-xs">Active Listing</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Share Section - Compact */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-lg">
-                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Share This Business</h3>
+            <div className="bg-white rounded-3xl p-5 border border-border/70 shadow-[0_14px_32px_rgba(15,23,42,0.08)]">
+                <h3 className="text-base font-bold text-foreground mb-3">Share This Business</h3>
                 <div className="space-y-2">
-                    <p className="text-xs text-slate-600 dark:text-slate-400">Professional listing URL:</p>
+                    <p className="text-xs text-muted-foreground">Listing URL</p>
                     <div className="flex items-center gap-2">
-                        <code className="flex-1 p-2 bg-white dark:bg-slate-700 rounded-lg text-xs font-mono text-slate-700 dark:text-slate-300 break-all border border-slate-200 dark:border-slate-600">
+                        <code className="flex-1 p-3 bg-secondary/60 rounded-2xl text-xs font-mono text-foreground break-all border border-border/60">
                             {getListingUrl(listingDetail?.slug || listingDetail?.business_name?.toLowerCase().replace(/\s+/g, '-'))}
                         </code>
                         <Button
                             size="sm"
                             variant="outline"
                             onClick={copyToClipboard}
-                            className="shrink-0 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 h-8 w-8 p-0"
+                            className="shrink-0 h-9 w-9 p-0"
                         >
                             {copied ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
                         </Button>

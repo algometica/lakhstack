@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { supabase } from '@/utils/supabase/client';
+import { getSupabaseClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { 
+import {
   Trash, 
   Edit, 
   Eye, 
@@ -36,6 +36,7 @@ import {
   Briefcase
 } from 'lucide-react';
 import Link from 'next/link';
+import { getListingCategoryLabel } from '@/lib/category-taxonomy';
 
 const INDUSTRIES = [
   'automobile', 'child-care', 'decoration', 'farming', 'fitness', 'food', 
@@ -50,12 +51,6 @@ export default function AdminPanel() {
   const { data: session, status } = useSession();
   const user = session?.user;
   const isAdmin = user?.role === 'admin' || user?.isAdmin;
-  
-  // Debug logging
-  console.log('Admin page - Session:', session);
-  console.log('Admin page - User:', user);
-  console.log('Admin page - Status:', status);
-  console.log('Admin page - isAdmin:', isAdmin);
   
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
@@ -82,6 +77,8 @@ export default function AdminPanel() {
   }, [listings, searchTerm, industryFilter, statusFilter, featuredFilter, priceFilter]);
 
   const loadData = async () => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     setLoading(true);
     try {
       // Load listings with images
@@ -154,6 +151,8 @@ export default function AdminPanel() {
   };
 
   const deleteListing = async (id) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     try {
       // Delete images first
       await supabase
@@ -175,6 +174,8 @@ export default function AdminPanel() {
   };
 
   const toggleListingStatus = async (id, currentStatus) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     try {
       await supabase
         .from('listing')
@@ -189,6 +190,8 @@ export default function AdminPanel() {
   };
 
   const togglePremiumStatus = async (id, currentPremium) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     try {
       console.log('Toggling premium status for listing:', id, 'Current premium:', currentPremium);
       
@@ -222,6 +225,8 @@ export default function AdminPanel() {
   };
 
   const deleteUser = async (id) => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     try {
       await supabase
         .from('users')
@@ -262,15 +267,7 @@ export default function AdminPanel() {
     );
   }
 
-  // Check admin permissions - Allow access for any authenticated user for now
-  const ADMIN_EMAILS = [
-    'harshkumaryadavg@gmail.com',
-    'escoemelyn@gmail.com', 
-    'lakhstack@gmail.com',
-    'lakhstack.dev@gmail.com'
-  ];
-
-  const isAuthorizedAdmin = user?.email && ADMIN_EMAILS.includes(user.email);
+  const isAuthorizedAdmin = isAdmin;
 
   if (!isAuthorizedAdmin) {
     return (
@@ -278,14 +275,6 @@ export default function AdminPanel() {
         <div className="text-center bg-card p-6 sm:p-8 rounded-lg shadow-md border border-border max-w-md w-full">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Access Denied</h1>
           <p className="text-muted-foreground mb-6">You don't have permission to access this page.</p>
-          <div className="text-sm text-muted-foreground mb-4 p-4 bg-muted/50 rounded border border-border/50">
-            <p><strong>Debug info:</strong></p>
-            <p>Email: {user?.email || 'None'}</p>
-            <p>Role: {user?.role || 'None'}</p>
-            <p>isAdmin (from token): {isAdmin ? 'Yes' : 'No'}</p>
-            <p>isAuthorizedAdmin: {isAuthorizedAdmin ? 'Yes' : 'No'}</p>
-            <p>Session status: {status}</p>
-          </div>
           <Button asChild className="w-full sm:w-auto">
             <Link href="/">Return to Home</Link>
           </Button>
@@ -543,7 +532,7 @@ export default function AdminPanel() {
                           </div>
                           <div className="flex items-center">
                             <Briefcase className="h-4 w-4 mr-2" />
-                            <span>{listing.category}</span>
+                            <span>{getListingCategoryLabel(listing)}</span>
                           </div>
                           {listing.price_range && (
                             <div className="flex items-center">

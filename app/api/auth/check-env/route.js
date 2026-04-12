@@ -5,10 +5,12 @@ export async function GET() {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     AUTH_SECRET: process.env.AUTH_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY,
     GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_API_KEY: process.env.NEXT_PUBLIC_SUPABASE_API_KEY,
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL,
   }
 
   const missingVars = Object.entries(requiredVars)
@@ -28,5 +30,7 @@ export async function GET() {
     hasGoogleMapsApiKey: !!process.env.GOOGLE_MAPS_API_KEY,
     hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
     hasSupabaseApiKey: !!process.env.NEXT_PUBLIC_SUPABASE_API_KEY,
+    hasNextAuthUrl: !!process.env.NEXTAUTH_URL,
+    hasAdminEmails: !!(process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL),
   })
 } 

@@ -2,6 +2,7 @@
 import GoogleMapSection from '@/app/_components/GoogleMapSection'
 import { Button } from '@/components/ui/button'
 import { BadgeDollarSign, ExternalLink, Factory, Filter, Instagram, MapPin, Phone } from 'lucide-react'
+import { getListingCategoryLabel } from '@/lib/category-taxonomy'
 
 import React from 'react'
 import BusinessDetail from './BusinessDetail'
@@ -68,7 +69,7 @@ function Details({ listingDetail }) {
                             </div>
                             <div>
                                 <p className='text-xs sm:text-sm font-medium text-muted-foreground'>Category</p>
-                                <p className='text-base sm:text-lg font-semibold text-foreground'>{listingDetail?.category}</p>
+                                <p className='text-base sm:text-lg font-semibold text-foreground'>{getListingCategoryLabel(listingDetail)}</p>
                             </div>
                         </div>
                     </div>

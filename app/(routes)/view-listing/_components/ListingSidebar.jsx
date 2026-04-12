@@ -5,6 +5,7 @@ import { BadgeDollarSign, Factory, Filter, MapPin, Phone, MailOpen, Copy, Check 
 import React, { useState } from 'react'
 import BusinessDetail from './BusinessDetail'
 import { toast } from 'sonner'
+import { getListingCategoryLabel } from '@/lib/category-taxonomy'
 
 function ListingSidebar({ listingDetail }) {
     const [copied, setCopied] = useState(false);
@@ -73,7 +74,7 @@ function ListingSidebar({ listingDetail }) {
                         </div>
                         <div>
                             <p className="text-sm text-muted-foreground">Category</p>
-                            <p className="font-medium text-foreground">{listingDetail?.category || 'Not specified'}</p>
+                            <p className="font-medium text-foreground">{getListingCategoryLabel(listingDetail)}</p>
                         </div>
                     </div>
 

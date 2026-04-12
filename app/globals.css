@@ -2,68 +2,40 @@
   @tailwind components;
   @tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 98%;
-      --foreground: 210 40% 8%;
+@layer base {
+  :root {
+      --background: 24 33% 98%;
+      --foreground: 222 20% 10%;
 
       --card: 0 0% 100%;
-      --card-foreground: 210 40% 8%;
+      --card-foreground: 222 24% 12%;
 
       --popover: 0 0% 100%;
-      --popover-foreground: 210 40% 8%;
+      --popover-foreground: 222 24% 12%;
 
-      --primary: 199 89% 48%;
-      --primary-foreground: 0 0% 98%;
+      --primary: 222 20% 12%;
+      --primary-foreground: 0 0% 100%;
 
-      --secondary: 210 40% 96%;
-      --secondary-foreground: 210 40% 8%;
+      --secondary: 24 22% 94%;
+      --secondary-foreground: 222 20% 16%;
 
-      --muted: 210 40% 96%;
-      --muted-foreground: 210 15% 48%;
+      --muted: 30 20% 94%;
+      --muted-foreground: 222 12% 45%;
 
-      --accent: 262 83% 58%;
-      --accent-foreground: 0 0% 98%;
+      --accent: 16 80% 55%;
+      --accent-foreground: 0 0% 100%;
 
-      --destructive: 0 84% 60%;
-      --destructive-foreground: 0 0% 98%;
+      --destructive: 0 76% 56%;
+      --destructive-foreground: 0 0% 100%;
 
-      --border: 210 40% 90%;
-      --input: 210 40% 90%;
-      --ring: 199 89% 48%;
+      --border: 24 18% 88%;
+      --input: 24 18% 88%;
+      --ring: 16 80% 55%;
 
-      --radius: 0.75rem;
+      --radius: 1.1rem;
     }
 
-    .dark {
-      --background: 210 40% 5%;
-      --foreground: 0 0% 95%;
-
-      --card: 210 40% 8%;
-      --card-foreground: 0 0% 95%;
-
-      --popover: 210 40% 8%;
-      --popover-foreground: 0 0% 95%;
-
-      --primary: 199 89% 48%;
-      --primary-foreground: 0 0% 98%;
-
-      --secondary: 210 40% 12%;
-      --secondary-foreground: 0 0% 95%;
-
-      --muted: 210 40% 12%;
-      --muted-foreground: 210 15% 65%;
-
-      --accent: 262 83% 58%;
-      --accent-foreground: 0 0% 98%;
-
-      --destructive: 0 84% 55%;
-      --destructive-foreground: 0 0% 98%;
-
-      --border: 210 40% 18%;
-      --input: 210 40% 18%;
-      --ring: 199 89% 48%;
-    }
+    
   }
 
   @layer base {
@@ -72,7 +44,19 @@
     }
     body {
       @apply bg-background text-foreground;
+      font-family: var(--font-sans);
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+      background-image:
+        radial-gradient(1200px 600px at 10% -10%, rgba(241, 99, 74, 0.10), transparent 60%),
+        radial-gradient(900px 500px at 85% 0%, rgba(24, 98, 97, 0.08), transparent 60%);
+      background-attachment: fixed;
     }
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
   }
 
   .cl-internal-rx251b {

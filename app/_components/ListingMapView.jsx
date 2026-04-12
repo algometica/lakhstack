@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from 'react'
 import Listing from './Listing'
-import { supabase } from '@/utils/supabase/client'
+import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner';
 import GoogleMapSection from './GoogleMapSection';
 
@@ -10,7 +10,6 @@ function ListingMapView({ featured }) {
   const [listing, setListing] = useState([]);
   const [searchedAddress, setSearchedAddress] = useState([]);
   const [coordinates, setCoordinates] = useState();
-  const [industryType, setIndustryType] = useState();
   const [categoryType, setCategoryType] = useState();
 
 
@@ -21,9 +20,11 @@ function ListingMapView({ featured }) {
 
   useEffect(() => {
     handleSearchClick();
-  }, [coordinates, searchedAddress, industryType, categoryType, featured])
+  }, [coordinates, searchedAddress, categoryType, featured])
 
   const getLatestListing = useCallback(async () => {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
     const { data, error } = await supabase
       .from('listing')
       .select('*, listing_images(url, listing_id)')
@@ -41,7 +42,9 @@ function ListingMapView({ featured }) {
   }, [featured])
 
   const handleSearchClick = useCallback(async () => {
-    if (!searchedAddress && !coordinates && !industryType && !categoryType) {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+    if (!searchedAddress && !coordinates && !categoryType) {
       getLatestListing();
       return;
     }
@@ -57,14 +60,6 @@ function ListingMapView({ featured }) {
       query = query.in('featured', featured);
     }
 
-    // Apply industry and category filters at database level
-    if (industryType) {
-      query = query.eq('industry', industryType)
-    }
-    if (categoryType) {
-      query = query.eq('category', categoryType)
-    }
-
     query = query.order('id', { ascending: false });
 
     const { data, error } = await query;
@@ -78,6 +73,11 @@ function ListingMapView({ featured }) {
     if (data) {
       let filteredListings = data;
       
+      // Apply category filter using canonical mapping
+      if (categoryType) {
+        filteredListings = filteredListings.filter((listingItem) => listingItem.category === categoryType);
+      }
+
       // Apply geographical filtering if coordinates are available
       if (coordinates && coordinates.lat && coordinates.lng) {
         filteredListings = data.filter(listing => {
@@ -119,7 +119,7 @@ function ListingMapView({ featured }) {
       
       setListing(filteredListings);
     }
-  }, [searchedAddress, coordinates, industryType, categoryType, featured])
+  }, [searchedAddress, coordinates, categoryType, featured])
 
 
   // Haversine formula to calculate distance between two points
@@ -138,14 +138,12 @@ function ListingMapView({ featured }) {
 
   return (
     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-      <div className='bg-muted/20 min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6'>
-        <Listing listing={listing}
-          handleSearchClick={handleSearchClick}
+      <div className='bg-transparent min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6'>
+        <Listing
+          listing={listing}
           searchedAddress={(value) => setSearchedAddress(value)} 
           setCoordinates={setCoordinates}
-          setIndustryType={setIndustryType}
           setCategoryType={setCategoryType}
-          industryType={industryType}
           categoryType={categoryType}
         />
       </div>

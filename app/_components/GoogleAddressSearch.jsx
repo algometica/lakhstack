@@ -159,15 +159,15 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
 
     return (
         <div className='flex items-center w-full relative'>
-            <MapPin className='absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary z-10' />
+            <MapPin className='absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary z-10' />
             
             <div className='relative flex-1'>
                 <Input
                     type="text"
-                    placeholder="Search By Location"
+                    placeholder="Search by city or neighborhood"
                     value={inputValue}
                     onChange={handleInputChange}
-                    className="pl-10 pr-10 h-12 border-border/50 focus:border-primary bg-background/50"
+                    className="pl-12 pr-10 h-12 md:h-14 border-black/10 bg-white/85 shadow-[0_12px_32px_rgba(15,23,42,0.08)] focus:ring-primary/30 rounded-2xl"
                     onFocus={() => {
                         if (predictions.length > 0) {
                             setShowPredictions(true);
@@ -179,7 +179,7 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted/50"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0 hover:bg-muted/50"
                         onClick={clearSelection}
                     >
                         <X className="h-4 w-4" />
@@ -188,9 +188,9 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
 
                 {/* Predictions Dropdown */}
                 {showPredictions && (predictions.length > 0 || isLoading) && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border/50 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-black/10 rounded-2xl shadow-[0_20px_50px_rgba(15,23,42,0.15)] z-50 max-h-64 overflow-y-auto">
                         {isLoading && (
-                            <div className="p-3 text-center text-muted-foreground flex items-center justify-center">
+                            <div className="p-4 text-center text-muted-foreground flex items-center justify-center">
                                 <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                                 <span className="ml-2">Searching...</span>
                             </div>
@@ -199,7 +199,7 @@ function GoogleAddressSearch({ selectedAddress, setCoordinates, clearTrigger }) 
                         {!isLoading && predictions.map((prediction, index) => (
                             <div
                                 key={prediction.placePrediction?.placeId || prediction.place || index}
-                                className="p-3 hover:bg-muted/50 cursor-pointer border-b border-border/30 last:border-b-0 transition-colors"
+                                className="px-4 py-3 hover:bg-black/5 cursor-pointer border-b border-black/5 last:border-b-0 transition-colors"
                                 onClick={() => handlePlaceSelect(prediction)}
                             >
                                 <div className="flex items-start gap-3">

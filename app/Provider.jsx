@@ -35,8 +35,8 @@ function Provider({ children }) {
       <AuthSessionProvider>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <div>
@@ -54,8 +54,8 @@ function Provider({ children }) {
     <AuthSessionProvider>
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
-        enableSystem
+        defaultTheme="light"
+        enableSystem={false}
         disableTransitionOnChange
       >
         <div>

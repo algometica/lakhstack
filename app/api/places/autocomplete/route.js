@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { makeGooglePlacesRequest } from '@/lib/google-places';
+import { getClientIp, rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request) {
     try {
+        const ip = getClientIp(request);
+        const { allowed } = rateLimit({ key: `places-autocomplete:${ip}`, limit: 60, windowMs: 60_000 });
+        if (!allowed) {
+            return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+        }
+
         const { input } = await request.json();
         
         if (!input || typeof input !== 'string') {

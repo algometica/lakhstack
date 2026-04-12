@@ -133,8 +133,8 @@ GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 AUTH_SECRET=your_nextauth_secret_key
 NEXTAUTH_URL=https://www.lakhstack.com  # or http://localhost:3000 for dev
 
-# Admin Configuration
-ADMIN_EMAIL=admin@example.com
+# Admin Configuration (comma-separated)
+ADMIN_EMAILS=admin1@example.com,admin2@example.com
 ```
 
 ### Installation Steps

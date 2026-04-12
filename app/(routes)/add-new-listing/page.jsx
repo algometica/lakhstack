@@ -2,7 +2,7 @@
 
 import GoogleAddressSearch from '@/app/_components/GoogleAddressSearch'
 import { Button } from '@/components/ui/button'
-import { supabase } from '@/utils/supabase/client';
+import { getSupabaseClient } from '@/utils/supabase/client';
 import { useSession } from 'next-auth/react';
 import { Loader, MapPin, ArrowRight, AlertCircle, CheckCircle2, Building } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -84,6 +84,8 @@ function AddNewListing() {
     };
 
     const nextHandler = async () => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         if (!validateInput()) {
             return;
         }
@@ -211,11 +213,11 @@ function AddNewListing() {
                         </div>
                         
                         <h1 className="text-4xl lg:text-5xl font-black text-foreground leading-tight mb-4">
-                            Create New Listing
+                            Create Vendor Listing
                         </h1>
                         
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                            Add a new business to LakhStack's directory. Start by entering the exact address of your business location.
+                            Add a vendor to LakhStack. Start by entering the exact address for the listing.
                         </p>
                     </div>
                 </div>

@@ -15,10 +15,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Formik } from 'formik'
 import { usePathname, useRouter } from 'next/navigation'
-import { supabase } from '@/utils/supabase/client'
+import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { useSession } from 'next-auth/react'
 import { generateListingSlug, generateSlug } from '@/lib/slug-utils'
+import { CATEGORY_OPTIONS } from '@/lib/category-taxonomy'
 import { 
     Loader, 
     Save, 
@@ -83,8 +84,9 @@ function EditListing({ params }) {
     
     // Load form state from localStorage
     const loadSavedFormState = () => {
+        if (typeof window === 'undefined' || !window.localStorage) return null;
         try {
-            const saved = localStorage.getItem(formStateKey);
+            const saved = window.localStorage.getItem(formStateKey);
             return saved ? JSON.parse(saved) : null;
         } catch (error) {
             console.error('Error loading form state:', error);
@@ -94,8 +96,9 @@ function EditListing({ params }) {
 
     // Save form state to localStorage
     const saveFormState = (formValues) => {
+        if (typeof window === 'undefined' || !window.localStorage) return;
         try {
-            localStorage.setItem(formStateKey, JSON.stringify(formValues));
+            window.localStorage.setItem(formStateKey, JSON.stringify(formValues));
         } catch (error) {
             console.error('Error saving form state:', error);
         }
@@ -103,8 +106,9 @@ function EditListing({ params }) {
 
     // Clear saved form state
     const clearSavedFormState = () => {
+        if (typeof window === 'undefined' || !window.localStorage) return;
         try {
-            localStorage.removeItem(formStateKey);
+            window.localStorage.removeItem(formStateKey);
         } catch (error) {
             console.error('Error clearing form state:', error);
         }
@@ -133,6 +137,8 @@ function EditListing({ params }) {
     }, [session, status, user, router, resolvedParams.id, hasLoadedInitially]);
 
     const verifyUserRecord = async () => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         try {
             setInitialLoading(true);
             setError('');
@@ -205,6 +211,8 @@ function EditListing({ params }) {
     };
 
     const onSubmitHandler = async (formValue) => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         setSaveLoading(true);
         setError('');
         setSuccess('');
@@ -478,7 +486,7 @@ function EditListing({ params }) {
                                 </h1>
                                 
                                 <p className="text-xl text-muted-foreground max-w-2xl">
-                                    Update business details, photos, and contact information for {listing?.business_name || 'this listing'}.
+                                    Update vendor details, photos, and contact information for {listing?.business_name || 'this listing'}.
                                 </p>
                             </div>
                             
@@ -624,39 +632,11 @@ function EditListing({ params }) {
                                                     <SelectValue placeholder="Select Category" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="auto-repair">Auto Repair</SelectItem>
-                                                    <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
-                                                    <SelectItem value="catering">Catering</SelectItem>
-                                                    <SelectItem value="custom-cakes">Custom Cakes</SelectItem>
-                                                    <SelectItem value="custom-cookies">Custom Cookies</SelectItem>
-                                                    <SelectItem value="custom-food">Custom Food / Delicacy</SelectItem>
-                                                    <SelectItem value="dog-sitter">Dog Sitter</SelectItem>
-                                                    <SelectItem value="electrician">Electrician</SelectItem>
-                                                    <SelectItem value="eyebrows">Eyebrows</SelectItem>
-                                                    <SelectItem value="facials">Facials</SelectItem>
-                                                    <SelectItem value="family-photos">Family Photography</SelectItem>
-                                                    <SelectItem value="decoration">Flowers & Decoration</SelectItem>
-                                                    <SelectItem value="hair-dresser">Hair Dresser</SelectItem>
-                                                    <SelectItem value="home-cook">Home Cook</SelectItem>
-                                                    <SelectItem value="house-cleaner">House Cleaner</SelectItem>
-                                                    <SelectItem value="lashes">Lashes</SelectItem>
-                                                    <SelectItem value="lifestyle-photos">Lifestyle Photography</SelectItem>
-                                                    <SelectItem value="mehndi">Mehndi</SelectItem>
-                                                    <SelectItem value="misc">Misc</SelectItem>
-                                                    <SelectItem value="music">Music</SelectItem>
-                                                    <SelectItem value="nails">Nails</SelectItem>
-                                                    <SelectItem value="nutrition">Nutrition</SelectItem>
-                                                    <SelectItem value="other">Other</SelectItem>
-                                                    <SelectItem value="personal-trainer">Personal Trainer</SelectItem>
-                                                    <SelectItem value="pet-groomer">Pet Groomer</SelectItem>
-                                                    <SelectItem value="plumber">Plumber</SelectItem>
-                                                    <SelectItem value="restaurant">Restaurant</SelectItem>
-                                                    <SelectItem value="web-development">Web Development</SelectItem>
-                                                    <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
-                                                    <SelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SelectItem>
-                                                    <SelectItem value="wedding-photos-videos">Wedding Photos / Videos</SelectItem>
-                                                    <SelectItem value="wedding-planner">Wedding Planner</SelectItem>
-                                                    <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
+                                                    {CATEGORY_OPTIONS.map((category) => (
+                                                        <SelectItem key={category.value} value={category.value}>
+                                                            {category.label}
+                                                        </SelectItem>
+                                                    ))}
                                                 </SelectContent>
                                             </Select>
                                         </div>

@@ -5,87 +5,42 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { CATEGORY_OPTIONS } from "@/lib/category-taxonomy"
 
-
-function FilterSection({ setIndustryType, setCategoryType, industryType, categoryType }) {
+function FilterSection({ setCategoryType, categoryType, compact = false }) {
     return (
-        <div className='p-4 md:p-6'>
-            <h3 className='text-lg font-semibold text-foreground mb-4'>Filter Results</h3>
+        <div className={compact ? 'p-0' : 'p-4 md:p-6'}>
+            {!compact && (
+                <div className='flex flex-col gap-2 mb-5'>
+                    <p className='text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground'>Filter</p>
+                    <h3 className='text-lg md:text-xl font-semibold text-foreground'>Find vendors by category</h3>
+                </div>
+            )}
             <div className='flex flex-col sm:flex-row gap-4'>
-                <Select
-                    value={industryType || 'All'}
-                    onValueChange={(value) => value === 'All' ? setIndustryType(null) : setIndustryType(value)}
-                >
-                    <SelectTrigger className="w-full sm:w-[200px] h-12">
-                        <SelectValue placeholder="Industry Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="All">All Industries</SelectItem>
-                        <SelectItem value="automobile">Automobile</SelectItem>
-                        <SelectItem value="child-care">Child Care</SelectItem>
-                        <SelectItem value="decoration">Decoration</SelectItem>
-                        <SelectItem value="farming">Farming</SelectItem>
-                        <SelectItem value="fitness">Fitness</SelectItem>
-                        <SelectItem value="food">Food</SelectItem>
-                        <SelectItem value="hair-services">Hair Services</SelectItem>
-                        <SelectItem value="handicraft">Handicraft</SelectItem>
-                        <SelectItem value="housekeeping">Housekeeping</SelectItem>
-                        <SelectItem value="immigration">Immigration</SelectItem>
-                        <SelectItem value="makeup-services">Makeup Services</SelectItem>
-                        <SelectItem value="personal-care">Personal Care Services</SelectItem>
-                        <SelectItem value="pet-services">Pet Services</SelectItem>
-                        <SelectItem value="photography">Photography</SelectItem>
-                        <SelectItem value="real-estate">Real Estate</SelectItem>
-                        <SelectItem value="technology">Technology</SelectItem>
-                        <SelectItem value="trades">Trades</SelectItem>
-                        <SelectItem value="tutoring">Tutoring</SelectItem>
-                        <SelectItem value="videography">Videography</SelectItem>
-                        <SelectItem value="wedding">Wedding</SelectItem>
-                    </SelectContent>
-                </Select>
-
                 <Select
                     value={categoryType || 'All'}
                     onValueChange={(value) => value === 'All' ? setCategoryType(null) : setCategoryType(value)}
                 >
-                    <SelectTrigger className="w-full sm:w-[200px] h-12">
-                        <SelectValue placeholder="Category Type" />
+                    <SelectTrigger className="w-full sm:w-[420px] h-12 bg-white/90 border border-black/10 shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
+                        <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="All">All Categories</SelectItem>
-                        <SelectItem value="auto-repair">Auto Repair</SelectItem>
-                        <SelectItem value="bridal-wear">Bridal Wear</SelectItem>
-                        <SelectItem value="catering">Catering</SelectItem>
-                        <SelectItem value="custom-cakes">Custom Cakes</SelectItem>
-                        <SelectItem value="custom-cookies">Custom Cookies</SelectItem>
-                        <SelectItem value="custom-food">Custom Food / Delicacy</SelectItem>
-                        <SelectItem value="dog-sitter">Dog Sitter</SelectItem>
-                        <SelectItem value="electrician">Electrician</SelectItem>
-                        <SelectItem value="eyebrows">Eyebrows</SelectItem>
-                        <SelectItem value="facials">Facials</SelectItem>
-                        <SelectItem value="family-photos">Family Photography</SelectItem>
-                        <SelectItem value="decoration">Flowers & Decoration</SelectItem>
-                        <SelectItem value="hair-dresser">Hair Dresser</SelectItem>
-                        <SelectItem value="home-cook">Home Cook</SelectItem>
-                        <SelectItem value="house-cleaner">House Cleaner</SelectItem>
-                        <SelectItem value="lashes">Lashes</SelectItem>
-                        <SelectItem value="lifestyle-photos">Lifestyle Photography</SelectItem>
-                        <SelectItem value="mehndi">Mehndi</SelectItem>
-                        <SelectItem value="misc">Misc</SelectItem>
-                        <SelectItem value="music">Music</SelectItem>
-                        <SelectItem value="nails">Nails</SelectItem>
-                        <SelectItem value="nutrition">Nutrition</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                        <SelectItem value="personal-trainer">Personal Trainer</SelectItem>
-                        <SelectItem value="pet-groomer">Pet Groomer</SelectItem>
-                        <SelectItem value="plumber">Plumber</SelectItem>
-                        <SelectItem value="restaurant">Restaurant</SelectItem>
-                        <SelectItem value="web-development">Web Development</SelectItem>
-                        <SelectItem value="wedding-sweets">Wedding Cakes & Sweets</SelectItem>
-                        <SelectItem value="wedding-makeup-hair">Wedding Hair & Makeup</SelectItem>
-                        <SelectItem value="wedding-photos-videos">Wedding Photos / Videos</SelectItem>
-                        <SelectItem value="wedding-planner">Wedding Planner</SelectItem>
-                        <SelectItem value="wedding-wear">Wedding Wear</SelectItem>
+                    <SelectContent className="max-w-[720px]">
+                        <SelectItem value="All" className="py-2">All Categories</SelectItem>
+                        {CATEGORY_OPTIONS.map((category) => (
+                            <SelectItem
+                                key={category.value}
+                                value={category.value}
+                                textValue={category.label}
+                                className="items-start py-2.5"
+                            >
+                                <div className="flex flex-col gap-1 text-left">
+                                    <span className="font-medium text-foreground">{category.label}</span>
+                                    <span className="text-[11px] text-muted-foreground/70 leading-snug max-w-[420px]">
+                                        {category.description}
+                                    </span>
+                                </div>
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>

@@ -1,19 +1,27 @@
-import { Inter } from "next/font/google";
+import { Manrope, Sora } from "next/font/google";
 import "./globals.css";
 import Provider from "./Provider";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
 
 export const metadata = {
-  title: "LakhStack | You have been LakhStacked",
-  description: "You have been LakhStacked!",
+  title: "LakhStack | Trusted event vendors",
+  description: "Discover vetted event vendors for real celebrations.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${manrope.variable} ${sora.variable}`}>
         <Provider>
           <Toaster />
           {children}

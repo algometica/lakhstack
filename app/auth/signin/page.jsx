@@ -39,9 +39,9 @@ export default function SignIn() {
 
   if (magicLinkSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full text-center space-y-8">
-          <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 border border-border/50 shadow-xl">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-border/70 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Mail className="w-8 h-8 text-primary" />
             </div>
@@ -63,29 +63,29 @@ export default function SignIn() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex items-center justify-center mb-6">
             <Image src="/logo.svg" width={48} height={48} alt="LakhStack Logo" />
-            <span className="ml-3 text-2xl font-black" style={{ color: '#db4a2b' }}>LakhStack</span>
+            <span className="ml-3 text-2xl font-black text-primary">LakhStack</span>
           </div>
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Welcome Back
+            Sign in
           </h2>
           <p className="text-lg text-muted-foreground">
-            Sign in to access your admin panel
+            Access your vendor listings and admin tools
           </p>
         </div>
         
-        <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-8 border border-border/50 shadow-xl">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-border/70 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
           <div className="space-y-6">
             
             {/* Google Sign In */}
             <Button
               onClick={handleGoogleSignIn}
               disabled={loading}
-              className="w-full h-12 text-lg font-semibold bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="w-full h-12 text-lg font-semibold bg-white hover:bg-secondary/60 text-gray-900 border border-border/70 shadow-[0_12px_24px_rgba(15,23,42,0.12)] transition-all duration-300 transform hover:-translate-y-0.5"
             >
               {loading ? (
                 <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export default function SignIn() {
                 <div className="w-full border-t border-border/50"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-card text-muted-foreground">or</span>
+                <span className="px-4 bg-white text-muted-foreground">or</span>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export default function SignIn() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your admin email"
                     required
-                    className="pl-10 h-12 border-border/50 focus:border-primary bg-background/50"
+                    className="pl-10 h-12 border-border/70 focus:border-primary bg-white/80"
                   />
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function SignIn() {
               <Button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="w-full h-12 text-lg font-semibold bg-primary hover:bg-primary/90 shadow-[0_12px_24px_rgba(242,92,84,0.25)] transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">

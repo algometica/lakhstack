@@ -20,26 +20,26 @@ function AuthErrorContent() {
   const errorMessage = errorMessages[error] || errorMessages.Default;
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-sm border p-6">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.12)] border border-border/70 p-6">
         <div className="text-center mb-6">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-destructive/10 mb-4">
             <AlertCircle className="h-6 w-6 text-red-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
             Authentication Error
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {errorMessage}
           </p>
         </div>
         
         <div className="space-y-4">
           {error === 'AccessDenied' && (
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+            <div className="bg-secondary/60 border border-border/70 rounded-2xl p-4">
               <div className="flex items-start">
-                <Mail className="h-5 w-5 text-blue-400 mt-0.5 mr-3" />
-                <div className="text-sm text-blue-800">
+                <Mail className="h-5 w-5 text-primary mt-0.5 mr-3" />
+                <div className="text-sm text-foreground">
                   <p className="font-medium">Access Restricted</p>
                   <p className="mt-1">
                     This application is only available to authorized administrators. 

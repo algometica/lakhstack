@@ -1,11 +1,14 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/utils/supabase/client'
+import { getSupabaseClient } from '@/utils/supabase/client'
 import { useSession } from 'next-auth/react'
 import { Bath, BedDouble, Factory, Filter, MapPin, Ruler, Trash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import React, { useEffect, useState } from 'react'
+import { getListingCategoryLabel } from '@/lib/category-taxonomy';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,6 +33,8 @@ function UserListing() {
     }, [user])
 
     const GetUserListing = async () => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         const { data, error } = await supabase
             .from('listing')
             .select(`*,listing_images(url,listing_id)`)
@@ -43,6 +48,8 @@ function UserListing() {
      * Delete Property 
      */
     const deleteListing = async (id) => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         //Delete Images  Record First
         await supabase
             .from('listing_images')
@@ -91,7 +98,7 @@ function UserListing() {
                                 <h2 className='flex gap-2 text-sm bg-slate-200 
                          rounded-md p-2 w-full text-gray-500 justify-center items-center'>
                                     <Filter className='h-4 w-4' />
-                                    {item?.category}
+                                    {getListingCategoryLabel(item)}
                                 </h2>
                             </div>
                             <div className='flex gap-2 justify-between'>
