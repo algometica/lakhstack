@@ -365,6 +365,8 @@ function EditListing({ params }) {
     }
 
     const publishBtnHandler = async () => {
+        const supabase = getSupabaseClient();
+        if (!supabase) return;
         setPublishLoading(true);
         setError('');
         setSuccess('');
