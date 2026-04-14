@@ -39,6 +39,13 @@ ADMIN_EMAIL=admin@example.com
 - Geographical filtering with 50km radius (PostgreSQL function: `get_listings_within_radius`)
 - Mobile-responsive with hamburger navigation
 
+## Writing Style (Notes / any copy)
+- Human voice, conversational, direct
+- No em-dashes (--), no en-dashes used as pauses
+- No AI-slop phrases: "delve into", "it's worth noting", "at the end of the day", "game-changer", "seamlessly", "leverage", "robust", "cutting-edge", "revolutionize", "unlock", "the fact that", "in today's world"
+- Short sentences preferred over long compound ones
+- No filler openers ("In this post, we will...")
+
 ## Key Tasks
 **Protected Routes**: Add to `middleware.js` + `useSession()`  
 **Admin Features**: Add to admin whitelist + check `user.role === 'admin'`  
