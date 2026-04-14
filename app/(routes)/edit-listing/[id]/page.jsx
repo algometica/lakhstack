@@ -114,35 +114,13 @@ function EditListing({ params }) {
         }
     };
     
-    // Check authentication and authorization
-    useEffect(() => {
-        if (status === 'loading') return; // Still loading
-
-        if (!session) {
-            router.replace('/auth/signin');
-            return;
-        }
-
-        // Check if user is admin (only admins should be able to edit listings)
-        const isAdmin = user?.role === 'admin' || user?.isAdmin;
-        if (!isAdmin) {
-            toast.error('Only administrators can edit listings');
-            router.replace('/');
-            return;
-        }
-
-        if (user && resolvedParams.id && !hasLoadedInitially) {
-            verifyUserRecord();
-        }
-    }, [session, status, user, router, resolvedParams.id, hasLoadedInitially, verifyUserRecord]);
-
     const verifyUserRecord = useCallback(async () => {
         const supabase = getSupabaseClient();
         if (!supabase) return;
         try {
             setInitialLoading(true);
             setError('');
-            
+
             const { data, error } = await supabase
                 .from('listing')
                 .select('*, listing_images(listing_id, url)')
@@ -171,6 +149,28 @@ function EditListing({ params }) {
             setInitialLoading(false);
         }
     }, [resolvedParams.id, router]);
+
+    // Check authentication and authorization
+    useEffect(() => {
+        if (status === 'loading') return; // Still loading
+
+        if (!session) {
+            router.replace('/auth/signin');
+            return;
+        }
+
+        // Check if user is admin (only admins should be able to edit listings)
+        const isAdmin = user?.role === 'admin' || user?.isAdmin;
+        if (!isAdmin) {
+            toast.error('Only administrators can edit listings');
+            router.replace('/');
+            return;
+        }
+
+        if (user && resolvedParams.id && !hasLoadedInitially) {
+            verifyUserRecord();
+        }
+    }, [session, status, user, router, resolvedParams.id, hasLoadedInitially, verifyUserRecord]);
 
     const validateForm = (formValue) => {
         const errors = [];
