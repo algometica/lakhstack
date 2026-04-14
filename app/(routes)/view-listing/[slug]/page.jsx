@@ -211,31 +211,29 @@ function ViewListingBySlug() {
      </div>
 
      {/* Business Header */}
-     <div className="mb-12">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-       <div className="flex-1">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
-         {listing.business_name}
-        </h1>
-        <div className="flex items-center gap-4 text-lg text-muted-foreground mb-6">
-         <div className="flex items-center gap-2">
-          <MapPin className="w-5 h-5 text-accent" />
-          <span className="font-medium">{listing.city}, {listing.country}</span>
-         </div>
-         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-foreground">Verified Business</span>
-         </div>
-         {listing.featured && (
-          <PremiumBadge size="sm" variant="glow" />
-         )}
+     <div className="mb-8 sm:mb-12">
+      <div className="flex-1">
+       <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-3 leading-tight">
+        {listing.business_name}
+       </h1>
+       <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-muted-foreground mb-4">
+        <div className="flex items-center gap-1.5">
+         <MapPin className="w-4 h-4 text-accent shrink-0" />
+         <span className="font-medium">{listing.city}, {listing.country}</span>
         </div>
-        {listing.business_desc && (
-         <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-          {listing.business_desc}
-         </p>
+        <div className="flex items-center gap-1.5">
+         <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse"></div>
+         <span className="text-sm font-medium text-foreground">Verified Business</span>
+        </div>
+        {listing.featured && (
+         <PremiumBadge size="sm" variant="glow" />
         )}
        </div>
+       {listing.business_desc && (
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl">
+         {listing.business_desc}
+        </p>
+       )}
       </div>
      </div>
     </div>

@@ -10,12 +10,12 @@ import ImageCarousel from './ImageCarousel'
 
 function Details({ listingDetail }) {
     return listingDetail && (
-        <div className='p-6 sm:p-8 lg:p-12'>
+        <div className='p-4 sm:p-8 lg:p-12'>
             {/* Header Section */}
             <div className='mb-8 sm:mb-12'>
                 <div className='flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 sm:gap-6'>
                     <div className='flex-1'>
-                        <h1 className='text-3xl sm:text-4xl lg:text-5xl font-black text-foreground leading-tight mb-4'>
+                        <h1 className='text-2xl sm:text-4xl lg:text-5xl font-black text-foreground leading-tight mb-4'>
                             {listingDetail?.business_name}
                         </h1>
                         <div className='flex items-center gap-2 sm:gap-3 text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6'>
@@ -146,8 +146,8 @@ function Details({ listingDetail }) {
             {/* About Section */}
             <div className='mb-12 sm:mb-16'>
                 <h2 className='text-2xl sm:text-3xl font-bold text-foreground mb-4 sm:mb-6'>About This Business</h2>
-                <div className='prose prose-lg max-w-none'>
-                    <p className='text-base sm:text-lg leading-relaxed text-foreground/80 bg-muted/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-border/50'>
+                <div className='max-w-none'>
+                    <p className='text-sm sm:text-base leading-relaxed text-foreground/80 bg-muted/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-border/50'>
                         {listingDetail?.description}
                     </p>
                 </div>

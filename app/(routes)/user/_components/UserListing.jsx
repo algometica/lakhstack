@@ -69,50 +69,52 @@ function UserListing() {
     }
     return (
         <div>
-            <h2 className='font-bold text-2xl'>Manage your listing</h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+            <h2 className='font-bold text-xl sm:text-2xl mb-4'>Manage your listing</h2>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5'>
                 {listing && listing.map((item, index) => (
-                    <div key={item.id || index} className='p-3 hover:border hover:border-primary rounded-lg cursor-pointer'>
-                        <h2 className='bg-primary m-1 rounded-lg text-white absolute px-2 text-sm p-1'>{item.active ? 'Published' : 'Draft'}</h2>
-                        <Image src={item?.listing_images[0] ?
-                            item?.listing_images[0]?.url
-                            : '/placeholder.svg'
-                        }
-                            width={800}
-                            height={150}
-                            alt={item?.business_name || 'Business listing'}
-                            className='rounded-lg object-cover h-[170px]'
-                        />
-                        <div className='flex mt-2 flex-col gap-2'>
-                            <h2 className='font-bold text-xl'>{item?.business_name}</h2>
-                            <h2 className='flex gap-2 text-sm text-gray-400 '>
-                                <MapPin className='h-4 w-4' />
-                                {item.address}</h2>
-                            <div className='flex gap-2 mt-2 justify-between'>
-                                <h2 className='flex gap-2 text-sm bg-slate-200 
-                         rounded-md p-2 w-full text-gray-500 justify-center items-center'>
-                                    <Factory className='h-4 w-4' />
-                                    {item?.industry}
-                                </h2>
-                                <h2 className='flex gap-2 text-sm bg-slate-200 
-                         rounded-md p-2 w-full text-gray-500 justify-center items-center'>
-                                    <Filter className='h-4 w-4' />
-                                    {getListingCategoryLabel(item)}
-                                </h2>
+                    <div key={item.id || index} className='relative rounded-xl border border-border/50 overflow-hidden bg-white shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-200'>
+                        <div className='relative'>
+                            <span className='absolute top-2 left-2 z-10 bg-primary text-white text-xs font-semibold px-2.5 py-1 rounded-full'>
+                                {item.active ? 'Published' : 'Draft'}
+                            </span>
+                            <Image src={item?.listing_images[0] ?
+                                item?.listing_images[0]?.url
+                                : '/placeholder.svg'
+                            }
+                                width={800}
+                                height={150}
+                                alt={item?.business_name || 'Business listing'}
+                                className='w-full object-cover h-44 sm:h-48'
+                            />
+                        </div>
+                        <div className='p-4 flex flex-col gap-3'>
+                            <h2 className='font-bold text-base sm:text-lg text-foreground line-clamp-1'>{item?.business_name}</h2>
+                            <p className='flex gap-1.5 items-center text-sm text-muted-foreground line-clamp-1'>
+                                <MapPin className='h-3.5 w-3.5 shrink-0' />
+                                {item.address}
+                            </p>
+                            <div className='flex gap-2'>
+                                <span className='flex gap-1.5 items-center text-xs bg-secondary/70 rounded-lg px-2.5 py-1.5 text-muted-foreground flex-1 justify-center truncate'>
+                                    <Factory className='h-3.5 w-3.5 shrink-0' />
+                                    <span className="truncate">{item?.industry}</span>
+                                </span>
+                                <span className='flex gap-1.5 items-center text-xs bg-secondary/70 rounded-lg px-2.5 py-1.5 text-muted-foreground flex-1 justify-center truncate'>
+                                    <Filter className='h-3.5 w-3.5 shrink-0' />
+                                    <span className="truncate">{getListingCategoryLabel(item)}</span>
+                                </span>
                             </div>
-                            <div className='flex gap-2 justify-between'>
-                                <Link href={`/view-listing/${item.slug || item.id}`} className="w-full">
-                                    <Button size="sm" variant="outline">
-                                        View</Button>
+                            <div className='flex gap-2 pt-1'>
+                                <Link href={`/view-listing/${item.slug || item.id}`} className="flex-1">
+                                    <Button variant="outline" className="w-full h-11 text-sm font-medium">View</Button>
                                 </Link>
-                                <Link href={'/edit-listing/' + item.id} className="w-full">
-                                    <Button size="sm" className="w-full">Edit</Button>
+                                <Link href={'/edit-listing/' + item.id} className="flex-1">
+                                    <Button className="w-full h-11 text-sm font-medium">Edit</Button>
                                 </Link>
 
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button size="sm" variant="destructive" className="w-full">
-                                            <Trash />
+                                        <Button variant="destructive" className="h-11 w-11 shrink-0 p-0">
+                                            <Trash className="h-4 w-4" />
                                         </Button>
 
                                     </AlertDialogTrigger>
