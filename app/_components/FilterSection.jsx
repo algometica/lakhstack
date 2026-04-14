@@ -33,12 +33,7 @@ function FilterSection({ setCategoryType, categoryType, compact = false }) {
                                 textValue={category.label}
                                 className="items-start py-2.5"
                             >
-                                <div className="flex flex-col gap-1 text-left">
-                                    <span className="font-medium text-foreground">{category.label}</span>
-                                    <span className="text-[11px] text-muted-foreground/70 leading-snug max-w-[420px]">
-                                        {category.description}
-                                    </span>
-                                </div>
+                                <span className="font-medium text-foreground">{category.label}</span>
                             </SelectItem>
                         ))}
                     </SelectContent>
