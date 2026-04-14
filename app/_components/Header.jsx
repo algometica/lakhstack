@@ -38,7 +38,7 @@ function Header() {
 
   return (
     <div className='fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-border/70 shadow-[0_8px_30px_rgba(15,23,42,0.06)]'>
-      <div className='mx-auto max-w-7xl px-6 lg:px-10 py-4 flex justify-between items-center'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-3 sm:py-4 flex justify-between items-center'>
         <div className='flex gap-8 items-center'>
           <Link href={'/'} className="flex items-center">
             <span className="text-xl font-black text-foreground font-display">LakhStack</span>
@@ -71,7 +71,7 @@ function Header() {
         <Button 
           variant="ghost" 
           size="icon" 
-          className='md:hidden h-10 w-10 hover:bg-secondary/60 transition-all duration-300'
+          className='md:hidden h-11 w-11 hover:bg-secondary/60 transition-all duration-300'
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}

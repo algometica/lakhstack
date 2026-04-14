@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Header from './_components/Header'
+import Footer from './_components/Footer'
 import { LoadScript } from '@react-google-maps/api'
 import { ThemeProvider } from "next-themes"
 import { AuthSessionProvider } from "@/components/providers/session-provider"
@@ -30,21 +31,21 @@ function Provider({ children }) {
     fetchMapsConfig();
   }, []);
 
+  const layout = (content) => (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 mt-16 sm:mt-[72px]">
+        {content}
+      </main>
+      <Footer />
+    </div>
+  );
+
   if (isLoading) {
     return (
       <AuthSessionProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <div>
-            <Header />
-            <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
-              {children}
-            </div>
-          </div>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+          {layout(children)}
         </ThemeProvider>
       </AuthSessionProvider>
     );
@@ -52,32 +53,14 @@ function Provider({ children }) {
 
   return (
     <AuthSessionProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem={false}
-        disableTransitionOnChange
-      >
-        <div>
-          {mapsApiKey ? (
-            <LoadScript
-              googleMapsApiKey={mapsApiKey}
-              libraries={[]}
-            >
-              <Header />
-              <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
-                {children}
-              </div>
-            </LoadScript>
-          ) : (
-            <>
-              <Header />
-              <div className='mt-20 sm:mt-24 md:mt-32 lg:mt-40'>
-                {children}
-              </div>
-            </>
-          )}
-        </div>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+        {mapsApiKey ? (
+          <LoadScript googleMapsApiKey={mapsApiKey} libraries={[]}>
+            {layout(children)}
+          </LoadScript>
+        ) : (
+          layout(children)
+        )}
       </ThemeProvider>
     </AuthSessionProvider>
   )
