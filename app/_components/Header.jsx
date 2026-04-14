@@ -57,11 +57,20 @@ function Header() {
           </Link>
           <Link href={'/all-listings'}>
             <div className={`transition-all duration-300 px-4 py-2 rounded-xl font-semibold text-sm cursor-pointer
-              ${path === '/all-listings' 
-                ? 'text-foreground bg-secondary/70 border border-border/70' 
+              ${path === '/all-listings'
+                ? 'text-foreground bg-secondary/70 border border-border/70'
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
               }`}>
               All Vendors
+            </div>
+          </Link>
+          <Link href={'/notes'}>
+            <div className={`transition-all duration-300 px-4 py-2 rounded-xl font-semibold text-sm cursor-pointer
+              ${path === '/notes' || path.startsWith('/notes/')
+                ? 'text-foreground bg-secondary/70 border border-border/70'
+                : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
+              }`}>
+              Notes
             </div>
           </Link>
           </nav>
@@ -148,11 +157,20 @@ function Header() {
             </Link>
             <Link href={'/all-listings'} onClick={() => setIsMobileMenuOpen(false)}>
               <div className={`transition-all duration-300 px-4 py-3 rounded-xl font-semibold text-sm cursor-pointer w-full text-center
-                ${path === '/all-listings' 
-                  ? 'text-primary bg-primary/10 border border-primary/20' 
+                ${path === '/all-listings'
+                  ? 'text-primary bg-primary/10 border border-primary/20'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
                 }`}>
                 All Vendors
+              </div>
+            </Link>
+            <Link href={'/notes'} onClick={() => setIsMobileMenuOpen(false)}>
+              <div className={`transition-all duration-300 px-4 py-3 rounded-xl font-semibold text-sm cursor-pointer w-full text-center
+                ${path === '/notes' || path.startsWith('/notes/')
+                  ? 'text-primary bg-primary/10 border border-primary/20'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/60'
+                }`}>
+                Notes
               </div>
             </Link>
           </nav>
