@@ -40,17 +40,17 @@ function Hero() {
 
                     {/* Trust Indicators */}
                     <div className="mt-10 flex flex-nowrap justify-center gap-2 sm:gap-4">
-                        <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-white/90 px-3 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
-                            <span className="text-xs font-semibold text-foreground sm:text-lg">Vetted</span>
-                            <span className="text-[10px] text-muted-foreground sm:text-xs">Quality-first listings</span>
+                        <div className="flex items-center rounded-full border border-border/70 bg-white/90 px-4 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
+                            <span className="text-sm font-semibold text-foreground sm:text-lg">Vetted</span>
+                            <span className="hidden sm:block text-xs text-muted-foreground">Quality-first listings</span>
                         </div>
-                        <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-white/90 px-3 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
-                            <span className="text-xs font-semibold text-foreground sm:text-lg">Local</span>
-                            <span className="text-[10px] text-muted-foreground sm:text-xs">Built for real communities</span>
+                        <div className="flex items-center rounded-full border border-border/70 bg-white/90 px-4 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
+                            <span className="text-sm font-semibold text-foreground sm:text-lg">Local</span>
+                            <span className="hidden sm:block text-xs text-muted-foreground">Built for real communities</span>
                         </div>
-                        <div className="flex items-center gap-1.5 rounded-full border border-border/70 bg-white/90 px-3 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
-                            <span className="text-xs font-semibold text-foreground sm:text-lg">Trusted</span>
-                            <span className="text-[10px] text-muted-foreground sm:text-xs">No ad-driven rankings</span>
+                        <div className="flex items-center rounded-full border border-border/70 bg-white/90 px-4 py-2 shadow-[0_6px_18px_rgba(15,23,42,0.07)] sm:flex-col sm:rounded-3xl sm:px-8 sm:py-5 sm:gap-1 sm:min-w-[120px]">
+                            <span className="text-sm font-semibold text-foreground sm:text-lg">Trusted</span>
+                            <span className="hidden sm:block text-xs text-muted-foreground">No ad-driven rankings</span>
                         </div>
                     </div>
 
