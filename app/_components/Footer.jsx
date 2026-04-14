@@ -15,7 +15,6 @@ function Footer() {
                 <nav className="flex items-center gap-5 text-xs font-medium text-muted-foreground">
                     <Link href="/" className="hover:text-foreground transition-colors">Featured</Link>
                     <Link href="/all-listings" className="hover:text-foreground transition-colors">All Vendors</Link>
-                    <Link href="/auth/signin" className="hover:text-foreground transition-colors">Admin Login</Link>
                 </nav>
             </div>
         </footer>
