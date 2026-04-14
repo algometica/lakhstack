@@ -41,7 +41,7 @@ function Header() {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-3 sm:py-4 flex justify-between items-center'>
         <div className='flex gap-8 items-center'>
           <Link href={'/'} className="flex items-center">
-            <span className="text-xl font-black text-foreground font-display">LakhStack</span>
+            <span className="text-xl font-black font-display" style={{color: '#ff914d'}}>LakhStack</span>
           </Link>
         
           {/* Desktop Navigation */}
