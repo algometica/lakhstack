@@ -15,7 +15,7 @@ function Hero() {
                     </div>
                     
                     {/* Main Heading - Bold and Authoritative */}
-                    <h1 className="font-display text-4xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl leading-none mt-6 bg-gradient-to-br from-accent via-orange-500 to-orange-700 bg-clip-text text-transparent">
+                    <h1 className="font-display text-4xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl leading-none mt-6" style={{color: '#ff914d'}}>
                         LakhStack
                     </h1>
                     
