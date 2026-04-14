@@ -5,9 +5,10 @@ import { useParams, useRouter } from 'next/navigation'
 import { getSupabaseClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { extractIdFromSlug } from '@/lib/slug-utils'
-import { Loader, ArrowLeft, MapPin, Phone, Globe, Link2, Mail, Calendar, DollarSign, Factory, Filter, BadgeDollarSign, ExternalLink, Award, Clock } from 'lucide-react'
+import { Loader, ArrowLeft, MapPin, Phone, Globe, Link2, Mail, Calendar, DollarSign, Factory, Filter, BadgeDollarSign, ExternalLink, Award, Clock, Pencil } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import ModernImageGallery from '../_components/ModernImageGallery'
 import ModernSidebar from '../_components/ModernSidebar'
 import GoogleMapSection from '@/app/_components/GoogleMapSection'
@@ -20,6 +21,8 @@ import { getListingCategoryLabel } from '@/lib/category-taxonomy'
 function ViewListingBySlug() {
  const params = useParams()
  const router = useRouter()
+ const { data: session } = useSession()
+ const isAdmin = session?.user?.role === 'admin' || session?.user?.isAdmin
  const [listing, setListing] = useState(null)
  const [loading, setLoading] = useState(true)
  const [error, setError] = useState('')
@@ -203,11 +206,19 @@ function ViewListingBySlug() {
     
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
      {/* Back Navigation */}
-     <div className="mb-8">
+     <div className="mb-8 flex items-center justify-between">
       <Link href="/all-listings" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-border/70 text-muted-foreground hover:text-foreground hover:bg-white hover:shadow-lg transition-all duration-200">
        <ArrowLeft className="w-4 h-4" />
        Back to Vendors
       </Link>
+      {isAdmin && listing?.id && (
+       <Link href={`/edit-listing/${listing.id}`}>
+        <Button size="sm" variant="outline" className="gap-2 rounded-full border-border/70 bg-white/90 backdrop-blur-sm hover:bg-white hover:shadow-lg transition-all duration-200">
+         <Pencil className="w-3.5 h-3.5" />
+         Edit Listing
+        </Button>
+       </Link>
+      )}
      </div>
 
      {/* Business Header */}
