@@ -123,7 +123,7 @@ function EditListing({ params }) {
 
             const { data, error } = await supabase
                 .from('listing')
-                .select('*, listing_images(listing_id, url)')
+                .select('*, listing_images(id, listing_id, url)')
                 .eq('id', resolvedParams.id);
 
             if (error) {
